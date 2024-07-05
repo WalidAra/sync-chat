@@ -8,6 +8,8 @@ import HomeLayout from "../components/layouts/HomeLayout";
 import AuthLayout from "../components/layouts/AuthLayout";
 import NotFound from "../pages/NotFound";
 import Home from "../pages/Home";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
 
 const AppRouter = () => {
   return (
@@ -32,8 +34,8 @@ const AppRouter = () => {
             </AuthLayout>
           }
         >
-          <Route path="login" element={<Home />} />
-          <Route path="register" element={<Home />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

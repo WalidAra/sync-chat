@@ -1,9 +1,7 @@
-import React from 'react'
+import MainView from "../components/atoms/MainView";
 
 const Home = () => {
-  return (
-    <div>Home</div>
-  )
-}
+  return <MainView></MainView>;
+};
 
-export default Home
+export default Home;

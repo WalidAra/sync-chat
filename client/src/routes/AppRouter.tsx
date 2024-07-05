@@ -7,6 +7,7 @@ import {
 import HomeLayout from "../components/layouts/HomeLayout";
 import AuthLayout from "../components/layouts/AuthLayout";
 import NotFound from "../pages/NotFound";
+import Home from "../pages/Home";
 
 const AppRouter = () => {
   return (
@@ -19,7 +20,9 @@ const AppRouter = () => {
               <Outlet />
             </HomeLayout>
           }
-        ></Route>
+        >
+          <Route index element={<Home />} />
+        </Route>
 
         <Route
           path="/auth"
@@ -28,7 +31,10 @@ const AppRouter = () => {
               <Outlet />
             </AuthLayout>
           }
-        ></Route>
+        >
+          <Route path="login" element={<Home />} />
+          <Route path="register" element={<Home />} />
+        </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

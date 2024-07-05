@@ -1,0 +1,7 @@
+openapi: 3.0.0
+info:
+  title: Sync-chat API
+  description: API documentation for Sync-chat
+  version: 1.0.0
+servers:
+  - url: http://localhost:2000/api

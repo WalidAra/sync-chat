@@ -1,0 +1,17 @@
+{
+  "name": "sync-chat",
+  "version": "1.0.0",
+  "description": "## Description Sync-chat is a full-stack chat application designed to facilitate real-time communication using Socket.io. This project serves as a learning tool for understanding Socket.io and collaborative coding. It allows users to chat with anyone on the platform, functioning as an alternative to popular messaging apps like Messenger and Viber.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "commit": "cz"
+
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "commitizen": "^4.3.0"
+  }
+}

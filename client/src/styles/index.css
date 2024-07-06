@@ -1,17 +1,21 @@
 .theme-switch {
   --toggle-size: 30px;
-  /*Thesizeisadjustedusingfont-size,thisisnottransformscale,soyoucanchooseanysize*/--container-width: 5.625em;
+  /*Thesizeisadjustedusingfont-size,thisisnottransformscale,soyoucanchooseanysize*/
+  --container-width: 5.625em;
   --container-height: 2.5em;
   --container-radius: 6.25em;
   /*radius0-minecraftmode:;
-  )*/--container-light-bg: #3d7eae;
+  )*/
+  --container-light-bg: #3d7eae;
   --container-night-bg: #1d1f2c;
   --circle-container-diameter: 3.375em;
   --sun-moon-diameter: 2.125em;
   --sun-bg: #ecca2f;
   --moon-bg: #c4c9d1;
   --spot-color: #959db1;
-  --circle-container-offset: calc(    (var(--circle-container-diameter) - var(--container-height)) / 2 * -1  );
+  --circle-container-offset: calc(
+    (var(--circle-container-diameter) - var(--container-height)) / 2 * -1
+  );
   --stars-color: #fff;
   --clouds-color: #f3fdff;
   --back-clouds-color: #aacadf;
@@ -24,7 +28,6 @@
   -ms-transform: scale(0.3) rotate(90deg);
   -o-transform: scale(0.3) rotate(90deg);
 }
-
 
 .theme-switch,
 .theme-switch *,
@@ -257,4 +260,41 @@
   -webkit-transform: translateY(-50%);
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
+}
+
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+* {
+  scroll-behavior: smooth;
 }

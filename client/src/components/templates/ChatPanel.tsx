@@ -1,15 +1,24 @@
 import { Box } from "@chakra-ui/react";
+import OnlineNPCS from "../molecules/OnlineNPCS";
+import ChatsContainer from "../organisms/ChatsContainer";
 
 const ChatPanel = () => {
   return (
     <Box
-      w={"380px"}
+      w={"320px"}
       h={"100vh"}
       display={"flex"}
       flexDir={"column"}
       borderRightWidth="1px"
       flexShrink={0}
-    ></Box>
+      py={2}
+      px={3}
+      ml={"14"}
+      gap={2}
+    >
+      <OnlineNPCS />
+      <ChatsContainer />
+    </Box>
   );
 };
 

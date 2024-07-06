@@ -19,6 +19,7 @@ const NavBar = () => {
       display={"flex"}
       justifyContent={"space-between"}
       alignItems={"center"}
+      
     >
       <UserShortCutCard name="Zenr">
         <Text color={"text.100"} fontSize={"14px"}>

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {  Flex } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import React from "react";
 import NavBar from "../templates/NavBar";
 import ChatPanel from "../templates/ChatPanel";
@@ -18,12 +18,7 @@ const MainViewLayout = ({
     <>
       <ChatPanel />
       <ChatInfoProvider>
-        <Flex
-          flexDir={"column"}
-          w={"100%"}
-          h={"100vh"}
-          backdropFilter="blur(10px)"
-        >
+        <Flex flexDir={"column"} w={"100%"} h={"100vh"}>
           <NavBar />
           {children}
         </Flex>

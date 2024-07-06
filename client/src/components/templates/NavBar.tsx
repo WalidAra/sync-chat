@@ -2,7 +2,7 @@ import { Box, Flex, IconButton, Text } from "@chakra-ui/react";
 import UserShortCutCard from "../organisms/UserShortCutCard";
 import { LuPhone, LuSearch } from "react-icons/lu";
 import { PiDotsThreeOutlineVerticalLight } from "react-icons/pi";
-import { RiLayout4Fill } from "react-icons/ri";
+import CloseDrawerBtn from "../atoms/CloseDrawerBtn";
 
 const NavBar = () => {
   return (
@@ -54,15 +54,7 @@ const NavBar = () => {
           />
         </Flex>
 
-        <IconButton
-          isRound={true}
-          variant="ghost"
-          colorScheme="blackAlpha"
-          aria-label="Done"
-          fontSize="20px"
-          color={"primary.100"}
-          icon={<RiLayout4Fill style={{ fontSize: "24px" }} />}
-        />
+        <CloseDrawerBtn />
       </Flex>
     </Box>
   );

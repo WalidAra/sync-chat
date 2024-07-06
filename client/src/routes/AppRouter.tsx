@@ -8,8 +8,8 @@ import HomeLayout from "../components/layouts/HomeLayout";
 import AuthLayout from "../components/layouts/AuthLayout";
 import NotFound from "../pages/NotFound";
 import Home from "../pages/Home";
-import Login from "../pages/Login";
-import Register from "../pages/Register";
+import Login from "../pages/auth/Login";
+import Register from "../pages/auth/Register";
 
 const AppRouter = () => {
   return (

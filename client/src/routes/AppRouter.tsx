@@ -7,9 +7,10 @@ import {
 import HomeLayout from "../components/layouts/HomeLayout";
 import AuthLayout from "../components/layouts/AuthLayout";
 import NotFound from "../pages/NotFound";
-import Home from "../pages/Home";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
+import Chats from "../pages/Chats";
+import GroupChats from "../pages/GroupChats";
 
 const AppRouter = () => {
   return (
@@ -23,7 +24,8 @@ const AppRouter = () => {
             </HomeLayout>
           }
         >
-          <Route index element={<Home />} />
+          <Route path="chats/:chatId" element={<Chats />} />
+          <Route path="groups/:groupId" element={<GroupChats />} />
         </Route>
 
         <Route

@@ -12,7 +12,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const router = require("./src/routes");
+const router = require("./src/features/index.js");
 
 app.use("/api", router);
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
@@ -22,7 +22,7 @@ app.listen(port, () => {
   console.log("\n=========================================");
   console.log(`🚀 Server is running on port: ${port}`);
   console.log("=========================================");
-  console.log(`📝 Total Endpoints: ${endpointsCount}`);
+  console.log(`📝 Total Endpoints:`, endpointsCount);
   console.log(`📄 API Docs: http://localhost:${port}/docs/`);
   console.log("=========================================");
   console.log("💡 Press CTRL + C to stop the server");

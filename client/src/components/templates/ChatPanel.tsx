@@ -13,7 +13,6 @@ const ChatPanel = () => {
       flexShrink={0}
       py={2}
       px={3}
-      ml={"14"}
       gap={2}
     >
       <OnlineNPCS />

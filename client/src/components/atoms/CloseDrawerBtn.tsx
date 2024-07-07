@@ -1,20 +1,19 @@
 import { IconButton } from "@chakra-ui/react";
-import { RiLayout4Fill } from "react-icons/ri";
 import { useChatDrawer } from "../../hooks";
+import { LuX } from "react-icons/lu";
 
 const CloseDrawerBtn = () => {
-  const { onToggle } = useChatDrawer();
+  const { onClose } = useChatDrawer();
 
   return (
     <IconButton
-      onClick={onToggle}
+      onClick={onClose}
       isRound={true}
       variant="ghost"
       colorScheme="blackAlpha"
       aria-label="Done"
       fontSize="20px"
-      color={"primary.100"}
-      icon={<RiLayout4Fill style={{ fontSize: "24px" }} />}
+      icon={<LuX style={{ fontSize: "24px" }} />}
     />
   );
 };

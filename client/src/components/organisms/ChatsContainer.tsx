@@ -87,9 +87,7 @@ const ChatsContainer = () => {
           <MessageBox isBordered />
           <MessageBox isBordered />
           <MessageBox isBordered />
-          <MessageBox isBordered />
-          <MessageBox isBordered />
-          <MessageBox isBordered />
+
         </Box>
       </Flex>
     </Box>

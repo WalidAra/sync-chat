@@ -298,3 +298,11 @@
 * {
   scroll-behavior: smooth;
 }
+
+.chat-bg {
+  background: linear-gradient(
+    29deg,
+    white 0%,
+    rgba(247, 217, 214, 1) 100%
+  );
+}

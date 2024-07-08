@@ -1,11 +1,12 @@
 const prisma = require("../../../config/prisma");
+const bcrypt = require("bcrypt");
 
-exports.GetUser = async (req, res) => {
-  const userId = req.params.id;
+exports.profile = async (req, res) => {
+  const { id } = req.user;
 
   try {
     const user = await prisma.user.findUnique({
-      where: { id: userId },
+      where: { id: id },
       select: {
         id: true,
         bio: true,
@@ -24,8 +25,6 @@ exports.GetUser = async (req, res) => {
       });
     }
 
-    console.log("User details:", user);
-
     res.status(200).json({
       status: true,
       message: "User details retrieved successfully",
@@ -41,19 +40,34 @@ exports.GetUser = async (req, res) => {
   }
 };
 
-exports.UpdateUser = async (req, res) => {
-  const userId = req.params.id;
-  const { email, name, bio, image } = req.body;
+exports.update = async (req, res) => {
+  const { id } = req.user;
+  const { email, name, image, bio, password } = req.body;
 
   try {
-    const updatedUser = await prisma.user.update({
-      where: { id: userId },
-      data: {
-        email,
-        name,
-        bio,
-        image,
+    const userData = await prisma.user.findUnique({
+      where: {
+        id: id,
       },
+    });
+
+    let hashedPassword;
+
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
+
+    const updatedUser = {
+      email: email || userData.email,
+      name: name || userData.name,
+      bio: bio || userData.bio,
+      image: image || userData.image,
+      password: password ? hashedPassword : userData.password,
+    };
+
+    const finalUser = await prisma.user.update({
+      where: { id: id },
+      data: updatedUser,
       select: {
         id: true,
         bio: true,
@@ -67,7 +81,7 @@ exports.UpdateUser = async (req, res) => {
     res.status(200).json({
       status: true,
       message: "User updated successfully",
-      data: updatedUser,
+      data: finalUser,
     });
   } catch (error) {
     console.error(error.message);
@@ -79,12 +93,12 @@ exports.UpdateUser = async (req, res) => {
   }
 };
 
-exports.DeleteUser = async (req, res) => {
-  const userId = req.params.id;
+exports.deleteUser = async (req, res) => {
+  const { id } = req.user;
 
   try {
     await prisma.user.delete({
-      where: { id: userId },
+      where: { id: id },
     });
 
     res.status(200).json({

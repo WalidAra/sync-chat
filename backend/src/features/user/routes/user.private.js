@@ -1,9 +1,8 @@
-const { GetUser, DeleteUser, UpdateUser } = require("../user.controller");
-
+const { profile, deleteUser, update } = require("../user.controller");
 const router = require("express").Router();
 
-router.get("/:id", GetUser);
-router.delete("/:id", DeleteUser);
-router.put("/:id", UpdateUser);
+router.get("/profile", profile);
+router.delete("/delete", deleteUser);
+router.put("/update", update);
 
 module.exports = router;

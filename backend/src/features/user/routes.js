@@ -1,5 +1,6 @@
+const checkAuth = require("../../middlewares/checkAuth");
 const router = require("express").Router();
 
-router.use("/private", require("./routes/user.private"));
+router.use("/private", checkAuth, require("./routes/user.private"));
 
 module.exports = router;

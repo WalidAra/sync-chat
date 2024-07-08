@@ -8,7 +8,6 @@ const InputValidator = async (req, res, next) => {
       .status(405)
       .json({ status: false, message: "All fields are required", data: null });
   }
-
   next();
 };
 

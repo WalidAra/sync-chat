@@ -1,6 +1,6 @@
 const prisma = require("../../../config/prisma");
 const bcrypt = require("bcrypt");
-const JwtHelper = require("../../helpers/jwt.helper");
+const JwtHelper = require("../../../helpers/jwt.helper");
 
 exports.Register = async (req, res) => {
   const { email, password, recall, name } = req.body;

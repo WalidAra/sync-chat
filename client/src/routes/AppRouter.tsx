@@ -7,8 +7,8 @@ import {
 import HomeLayout from "../components/layouts/HomeLayout";
 import AuthLayout from "../components/layouts/AuthLayout";
 import NotFound from "../pages/NotFound";
-import Login from "../pages/Login";
-import Register from "../pages/Register";
+import Login from "../pages/auth/Login";
+import Register from "../pages/auth/Register";
 import Chats from "../pages/Chats";
 import GroupChats from "../pages/GroupChats";
 

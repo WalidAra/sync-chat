@@ -5,11 +5,13 @@ import {
   Stack,
   Button,
   FormErrorMessage,
+  Spinner,
 } from "@chakra-ui/react";
 import AuthForm from "../../components/templates/auth/AuthForm";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 
 const schema = z.object({
   email: z.string().email("Invalid email format"),
@@ -20,6 +22,9 @@ const schema = z.object({
 });
 
 const Login: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
   const {
     handleSubmit,
     register,
@@ -32,7 +37,35 @@ const Login: React.FC = () => {
     },
   });
 
-  const handleLogin = async () => {};
+  const handleLogin = async (data: { email: string; password: string }) => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch(
+        "http://localhost:2000/api/auth/public/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      const result = await response.json();
+
+      if (response.ok) {
+        console.log("Login successful:", result);
+      } else {
+        setError(result.message);
+      }
+    } catch (err) {
+      setError("An error occurred.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <AuthForm
@@ -53,6 +86,7 @@ const Login: React.FC = () => {
             <Input type="password" {...register("password")} />
             <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
           </FormControl>
+          {error && <div style={{ color: "red" }}>{error}</div>}
           <Button
             _hover={{
               transform: "scale(1.02)",
@@ -64,7 +98,10 @@ const Login: React.FC = () => {
             size="lg"
             fontSize="md"
             w="full"
-          ></Button>
+            isLoading={isLoading}
+          >
+            {isLoading ? <Spinner size="sm" /> : "Login"}
+          </Button>
         </Stack>
       </form>
     </AuthForm>

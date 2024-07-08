@@ -5,11 +5,13 @@ import {
   Stack,
   Button,
   FormErrorMessage,
+  Spinner,
 } from "@chakra-ui/react";
 import AuthForm from "../../components/templates/auth/AuthForm";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 
 const schema = z
   .object({
@@ -33,6 +35,9 @@ const schema = z
   });
 
 const Register: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
   const {
     handleSubmit,
     register,
@@ -47,7 +52,39 @@ const Register: React.FC = () => {
     },
   });
 
-  const handleRegister = async () => {};
+  const handleRegister = async (data: {
+    name: string;
+    email: string;
+    password: string;
+  }) => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch(
+        "http://localhost:2000/api/auth/public/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      const result = await response.json();
+
+      if (response.ok) {
+        console.log("Registration successful:", result);
+      } else {
+        setError(result.message);
+      }
+    } catch (err) {
+      setError("An error occurred.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <AuthForm
@@ -83,6 +120,7 @@ const Register: React.FC = () => {
               {errors.confirmPassword?.message}
             </FormErrorMessage>
           </FormControl>
+          {error && <div style={{ color: "red" }}>{error}</div>}
           <Button
             _hover={{
               transform: "scale(1.02)",
@@ -94,7 +132,10 @@ const Register: React.FC = () => {
             size="lg"
             fontSize="md"
             w="full"
-          ></Button>
+            isLoading={isLoading}
+          >
+            {isLoading ? <Spinner size="sm" /> : "Register"}
+          </Button>
         </Stack>
       </form>
     </AuthForm>

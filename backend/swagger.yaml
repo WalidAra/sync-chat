@@ -5,3 +5,19 @@ info:
   version: 1.0.0
 servers:
   - url: http://localhost:2000/api
+paths:
+  /health:
+    get:
+      summary: Check server health
+      description: Returns a 200 status if the server is running
+      responses:
+        '200':
+          description: Server is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "healthy"

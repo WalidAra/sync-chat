@@ -1,4 +1,4 @@
-const prisma = require("../config/prisma");
+const prisma = require("../../config/prisma");
 
 const ProviderSeeder = async () => {
   try {

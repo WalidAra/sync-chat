@@ -58,13 +58,13 @@ const Login: React.FC = () => {
               transform: "scale(1.02)",
               transition: "transform 0.2s ease-in-out",
             }}
+            bg="black"
+            color="white"
             type="submit"
             size="lg"
             fontSize="md"
             w="full"
-          >
-            Login
-          </Button>
+          ></Button>
         </Stack>
       </form>
     </AuthForm>

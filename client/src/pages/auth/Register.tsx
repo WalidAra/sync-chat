@@ -11,17 +11,26 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-const schema = z.object({
-  username: z
-    .string()
-    .min(4, "Username should be at least 4 characters")
-    .max(20, "Username should not exceed 20 characters"),
-  email: z.string().email("Invalid email format"),
-  password: z
-    .string()
-    .min(8, "Password should be at least 8 characters")
-    .max(20, "Password should not exceed 20 characters"),
-});
+const schema = z
+  .object({
+    name: z
+      .string()
+      .min(4, "Username should be at least 4 characters")
+      .max(20, "Username should not exceed 20 characters"),
+    email: z.string().email("Invalid email format"),
+    password: z
+      .string()
+      .min(8, "Password should be at least 8 characters")
+      .max(20, "Password should not exceed 20 characters"),
+    confirmPassword: z
+      .string()
+      .min(8, "Password should be at least 8 characters")
+      .max(20, "Password should not exceed 20 characters"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
 const Register: React.FC = () => {
   const {
@@ -31,13 +40,14 @@ const Register: React.FC = () => {
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      username: "",
+      name: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
-  async function handleRegister() {}
+  const handleRegister = async () => {};
 
   return (
     <AuthForm
@@ -48,10 +58,10 @@ const Register: React.FC = () => {
     >
       <form onSubmit={handleSubmit(handleRegister)}>
         <Stack spacing={4}>
-          <FormControl id="username" isInvalid={!!errors.username}>
+          <FormControl id="name" isInvalid={!!errors.name}>
             <FormLabel>Username</FormLabel>
-            <Input type="text" {...register("username")} />
-            <FormErrorMessage>{errors.username?.message}</FormErrorMessage>
+            <Input type="text" {...register("name")} />
+            <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
           </FormControl>
           <FormControl id="email" isInvalid={!!errors.email}>
             <FormLabel>Email address</FormLabel>
@@ -63,18 +73,28 @@ const Register: React.FC = () => {
             <Input type="password" {...register("password")} />
             <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
           </FormControl>
+          <FormControl
+            id="confirmPassword"
+            isInvalid={!!errors.confirmPassword}
+          >
+            <FormLabel>Confirm Password</FormLabel>
+            <Input type="password" {...register("confirmPassword")} />
+            <FormErrorMessage>
+              {errors.confirmPassword?.message}
+            </FormErrorMessage>
+          </FormControl>
           <Button
             _hover={{
               transform: "scale(1.02)",
               transition: "transform 0.2s ease-in-out",
             }}
+            bg="black"
+            color="white"
             type="submit"
             size="lg"
             fontSize="md"
             w="full"
-          >
-            Register
-          </Button>
+          ></Button>
         </Stack>
       </form>
     </AuthForm>

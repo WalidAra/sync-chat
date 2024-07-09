@@ -27,10 +27,9 @@ const OAuthButton: React.FC<OAuthButtonProps> = ({
       <Flex
         alignItems="center"
         justifyContent="center"
-        bg="#1C1C24"
+        bg="#FFFEFF"
         w="full"
         h="full"
-        color="white"
         borderRadius="5px"
         p="2"
       >

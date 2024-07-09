@@ -19,8 +19,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
 }) => {
   return (
     <Grid
-      bg="#1C1C24"
-      color="white"
+      bg="background"
       templateColumns={{ md: "1fr", lg: "1fr 1fr" }}
       minH="100vh"
     >
@@ -29,7 +28,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
       </Box>
       <Grid
         placeItems="center"
-        bg="rgba(18, 18, 18, 0.2)"
+        bg="rgba(250, 250, 250, 0.2)"
         // backdropFilter="blur(10px)"
         boxShadow="0 4px 6px rgba(0, 0, 0, 0.2)"
       >

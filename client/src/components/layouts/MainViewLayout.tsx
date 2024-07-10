@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Box, BoxProps, Flex, Text } from "@chakra-ui/react";
+import { BoxProps, Flex } from "@chakra-ui/react";
 import React from "react";
 import NavBar from "../templates/NavBar";
 import ChatPanel from "../templates/ChatPanel";

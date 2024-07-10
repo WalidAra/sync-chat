@@ -11,36 +11,39 @@ import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import Chats from "../pages/Chats";
 import GroupChats from "../pages/GroupChats";
+import Middleware from "../components/utils/Middleware";
 
 const AppRouter = () => {
   return (
     <Router>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <HomeLayout>
-              <Outlet />
-            </HomeLayout>
-          }
-        >
-          <Route path="chats/:chatId" element={<Chats />} />
-          <Route path="groups/:groupId" element={<GroupChats />} />
-        </Route>
+      <Middleware>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <HomeLayout>
+                <Outlet />
+              </HomeLayout>
+            }
+          >
+            <Route path="chats/:chatId" element={<Chats />} />
+            <Route path="groups/:groupId" element={<GroupChats />} />
+          </Route>
 
-        <Route
-          path="/auth"
-          element={
-            <AuthLayout>
-              <Outlet />
-            </AuthLayout>
-          }
-        >
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-        </Route>
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+          <Route
+            path="/auth"
+            element={
+              <AuthLayout>
+                <Outlet />
+              </AuthLayout>
+            }
+          >
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+          </Route>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Middleware>
     </Router>
   );
 };

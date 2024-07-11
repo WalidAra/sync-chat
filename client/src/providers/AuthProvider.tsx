@@ -18,9 +18,18 @@ export default function AuthProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [token, setToken] = useState<string | null>(
-    () => localStorage.getItem("sync-token") || null
-  );
+  const [token, setToken] = useState<string | null>(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchToken = urlParams.get("token");
+
+    if (searchToken) {
+      localStorage.setItem("sync-token", searchToken);
+      return searchToken;
+    }
+
+    const storedToken = localStorage.getItem("sync-token");
+    return storedToken || null;
+  });
 
   return (
     <Auth.Provider

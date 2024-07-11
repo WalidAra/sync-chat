@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const passport = require("passport");
 
-
 router.get(
   "/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
@@ -12,11 +11,7 @@ router.get(
   passport.authenticate("google", { session: false }),
   (req, res) => {
     if (req.user && req.user.token) {
-      res.status(200).json({
-        status: true,
-        message: "Authentication successful",
-        data: req.user,
-      });
+      res.redirect(`http://localhost:5173/?token=${req.user.token}`);
     } else {
       res
         .status(400)

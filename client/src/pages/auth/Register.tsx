@@ -12,6 +12,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { FetchResponse } from "../../types";
 
 const schema = z
   .object({
@@ -72,11 +73,9 @@ const Register: React.FC = () => {
         }
       );
 
-      const result = await response.json();
+      const result: FetchResponse = await response.json();
 
-      if (response.ok) {
-        console.log("Registration successful:", result);
-      } else {
+      if (!response.ok) {
         setError(result.message);
       }
     } catch (err) {

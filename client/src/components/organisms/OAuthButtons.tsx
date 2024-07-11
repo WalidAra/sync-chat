@@ -4,7 +4,9 @@ import { FcGoogle } from "react-icons/fc";
 import OAuthButton from "../molecules/OAuthButton";
 
 const OAuthButtons: React.FC = () => {
-  const handleGoogleLogin = () => {};
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:2000/api/auth/public/oauth/google";
+  };
 
   const handleGithubLogin = () => {};
 

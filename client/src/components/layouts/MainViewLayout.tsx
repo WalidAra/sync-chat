@@ -32,7 +32,7 @@ const MainViewLayout = ({
           {children}
         </MainView>
 
-        <ChatInfoDrawer isGroup />
+        {/* <ChatInfoDrawer isGroup /> */}
       </ChatInfoProvider>
     </Flex>
   );

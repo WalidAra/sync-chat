@@ -70,8 +70,9 @@ model Chat {
   createdAt DateTime @default(now())
   name      String?
   isGroup   Boolean
-  adminId   String
-  admin     User     @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  adminId   String?
+  image     String?
+  admin     User?     @relation(fields: [adminId], references: [id], onDelete: Cascade)
 
   Message    Message[]
   Attachment Attachment[]

@@ -2,7 +2,8 @@ import { Box, Flex, IconButton, Text } from "@chakra-ui/react";
 import UserShortCutCard from "../organisms/UserShortCutCard";
 import { LuPhone, LuSearch } from "react-icons/lu";
 import { PiDotsThreeOutlineVerticalLight } from "react-icons/pi";
-import CloseDrawerBtn from "../atoms/ToggleDrawer";
+import ToggleDrawer from "../atoms/ToggleDrawer";
+import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 
 const NavBar = () => {
   return (
@@ -46,17 +47,25 @@ const NavBar = () => {
             fontSize="20px"
             icon={<LuSearch />}
           />
-          <IconButton
-            isRound={true}
-            variant="ghost"
-            colorScheme="blackAlpha"
-            aria-label="Done"
-            fontSize="20px"
-            icon={<PiDotsThreeOutlineVerticalLight />}
-          />
+
+          <Menu>
+            <MenuButton
+              isRound={true}
+              variant="ghost"
+              colorScheme="blackAlpha"
+              aria-label="Done"
+              fontSize="20px"
+              as={IconButton}
+              icon={<PiDotsThreeOutlineVerticalLight />}
+            />
+            <MenuList>
+              <MenuItem>Block</MenuItem>
+              <MenuItem color={"red"}>Delete</MenuItem>
+            </MenuList>
+          </Menu>
         </Flex>
 
-        <CloseDrawerBtn />
+        <ToggleDrawer isGroup />
       </Flex>
     </Box>
   );

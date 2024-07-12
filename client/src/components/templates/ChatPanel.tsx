@@ -14,6 +14,7 @@ const ChatPanel = () => {
       py={2}
       px={3}
       gap={2}
+      overflow={"auto"}
     >
       <OnlineNPCS />
       <ChatsContainer />

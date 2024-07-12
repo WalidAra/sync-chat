@@ -1,31 +1,24 @@
 import {
   Box,
   Flex,
-  IconButton,
   Input,
   InputGroup,
   InputRightElement,
   Text,
 } from "@chakra-ui/react";
-import { LuHash, LuPenSquare, LuSearch } from "react-icons/lu";
+import { LuHash, LuSearch } from "react-icons/lu";
 import MessageBox from "../molecules/MessageBox";
+import CreateGroupDialog from "./CreateGroupDialog";
 // import { useState } from "react";
 
 const ChatsContainer = () => {
   //   const [searchValue, setSearchValue] = useState<false>(false);
 
   return (
-    <Box
-      w={"100%"}
-      flex={"1 1 0%"}
-      display={"flex "}
-      flexDir={"column"}
-      overflow={"auto"}
-      px={1}
-    >
+    <Box w={"100%"} display={"flex "} flexDir={"column"} px={1}>
       <Flex justifyContent={"space-between"} alignItems={"center"}>
         <Flex alignItems={"center"} gap={2}>
-          <Text as={"h2"} fontWeight={500} fontSize={"20px"}>
+          <Text as={"h2"} fontWeight={"bold"} fontSize={"lg"}>
             Messages{" "}
             <Text as={"span"} color={"primary.100"}>
               48 new
@@ -33,14 +26,7 @@ const ChatsContainer = () => {
           </Text>
         </Flex>
 
-        <IconButton
-          isRound={true}
-          variant="ghost"
-          colorScheme="blackAlpha"
-          aria-label="Done"
-          fontSize="20px"
-          icon={<LuPenSquare />}
-        />
+        <CreateGroupDialog />
       </Flex>
 
       <InputGroup>
@@ -87,7 +73,19 @@ const ChatsContainer = () => {
           <MessageBox isBordered />
           <MessageBox isBordered />
           <MessageBox isBordered />
-
+          <MessageBox isBordered />
+          <MessageBox isBordered />
+          <MessageBox isBordered />
+          <MessageBox isBordered />
+          <MessageBox isBordered />
+          <MessageBox isBordered />
+          <MessageBox isBordered />
+          <MessageBox isBordered />
+          <MessageBox isBordered />
+          <MessageBox isBordered />
+          <MessageBox isBordered />
+          <MessageBox isBordered />
+          <MessageBox isBordered />
         </Box>
       </Flex>
     </Box>

@@ -29,12 +29,12 @@ router.get(
   "/github/callback",
   passport.authenticate("github", { session: false }),
   (req, res) => {
+
+    console.log('====================================');
     console.log(req.user);
-    if (req.user && req.user.accessToken) {
-      console.log(req.user);
-      res.redirect(
-        `http://localhost:5173/auth/login/?token=${req.user.accessToken}`
-      );
+    console.log('====================================');
+    if (req.user && req.user.token) {
+      res.redirect(`http://localhost:5173/?token=${req.user.token}`);
     } else {
       res
         .status(400)

@@ -6,7 +6,13 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "studio": "npx prisma studio"
+    "studio": "npx prisma studio",
+    
+    "generate": "npx prisma generate",
+    "db:migrate": "npx prisma migrate dev",
+    "db:studio": "npx prisma studio",
+    "db:reset": "npx prisma migrate reset",
+    "db:seed": "node seed/index"
   },
   "keywords": [],
   "author": "",

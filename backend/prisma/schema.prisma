@@ -24,7 +24,7 @@ model User {
   providerId   String
   updatedAt    DateTime?
   bio          String?
-  provider     Provider  @relation(fields: [providerId], references: [id])
+  Provider     Provider  @relation(fields: [providerId], references: [id])
   lastOnlineAt DateTime?
 
   Message    Message[]

@@ -8,25 +8,21 @@ async function handleGoogleOAuth(profile) {
   const image = photos[0].value;
 
   try {
-    let user = await prisma.user.findUnique({
+    let existUser = await prisma.user.findUnique({
       where: { email },
-      select: {
-        id: true,
-        bio: true,
-        email: true,
-        image: true,
-        createdAt: true,
-        name: true,
+      include: {
+        Provider: true,
       },
     });
 
     const pwHash = generateRandomChars(16);
-    const provider = await prisma.provider.findFirst({
-      where: { name: "Google" },
-    });
 
-    if (!user) {
-      user = await prisma.user.create({
+    if (!existUser || (existUser && existUser.Provider.name === "Github")) {
+      const provider = await prisma.provider.findFirst({
+        where: { name: "Google" },
+      });
+
+      const newUser = await prisma.user.create({
         data: {
           name: displayName.trim(),
           email,
@@ -44,16 +40,16 @@ async function handleGoogleOAuth(profile) {
         },
       });
 
-      const token = JwtHelper.generateToken({ id: user.id }, true);
-
+      const token = JwtHelper.generateToken({ id: newUser.id }, true);
       return {
-        ...user,
+        ...newUser,
         token,
       };
     }
 
-    const token = JwtHelper.generateToken({ id: user.id }, true);
+    const { Provider, lastLoginAt, updatedAt, password, ...user } = existUser;
 
+    const token = JwtHelper.generateToken({ id: user.id }, true);
     return {
       ...user,
       token,
@@ -63,9 +59,8 @@ async function handleGoogleOAuth(profile) {
   }
 }
 
-module.exports = { handleGoogleOAuth };
-
-async function handleGitHubOAuth(profile, accessToken) {
+async function handleGitHubOAuth(profile) {
+  
   const { username, emails } = profile;
   const email = emails[0].value;
 
@@ -87,7 +82,7 @@ async function handleGitHubOAuth(profile, accessToken) {
       where: { name: "Github" },
     });
 
-    if (!user) {
+    if (!user || (user && user.provider.name === "Google")) {
       user = await prisma.user.create({
         data: {
           name: username.trim(),
@@ -106,13 +101,15 @@ async function handleGitHubOAuth(profile, accessToken) {
       });
     }
 
+    const token = JwtHelper.generateToken({ id: user.id }, true);
+
     return {
       ...user,
-      accessToken,
+      token,
     };
   } catch (error) {
     throw new Error("Error handling GitHub OAuth : " + error.message);
   }
 }
 
-module.exports = { handleGitHubOAuth };
+module.exports = { handleGitHubOAuth, handleGoogleOAuth };

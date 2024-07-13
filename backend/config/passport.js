@@ -1,5 +1,8 @@
 const passport = require("passport");
-const { handleGoogleOAuth, handleGitHubOAuth } = require("../src/features/auth/auth.model");
+const {
+  handleGoogleOAuth,
+  handleGitHubOAuth,
+} = require("../src/features/auth/auth.model");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const GitHubStrategy = require("passport-github2").Strategy;
 

@@ -8,7 +8,9 @@ const OAuthButtons: React.FC = () => {
     window.location.href = "http://localhost:2000/api/auth/public/oauth/google";
   };
 
-  const handleGithubLogin = () => {};
+  const handleGithubLogin = () => {
+    window.location.href = "http://localhost:2000/api/auth/public/oauth/github";
+  };
 
   return (
     <Stack spacing={4}>

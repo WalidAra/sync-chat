@@ -64,3 +64,55 @@ async function handleGoogleOAuth(profile) {
 }
 
 module.exports = { handleGoogleOAuth };
+
+async function handleGitHubOAuth(profile, accessToken) {
+  const { username, emails } = profile;
+  const email = emails[0].value;
+
+  try {
+    let user = await prisma.user.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        bio: true,
+        email: true,
+        image: true,
+        createdAt: true,
+        name: true,
+      },
+    });
+
+    const pwHash = generateRandomChars(16);
+    const provider = await prisma.provider.findFirst({
+      where: { name: "Github" },
+    });
+
+    if (!user) {
+      user = await prisma.user.create({
+        data: {
+          name: username.trim(),
+          email,
+          password: pwHash,
+          providerId: provider.id,
+        },
+        select: {
+          id: true,
+          bio: true,
+          email: true,
+          image: true,
+          createdAt: true,
+          name: true,
+        },
+      });
+    }
+
+    return {
+      ...user,
+      accessToken,
+    };
+  } catch (error) {
+    throw new Error("Error handling GitHub OAuth : " + error.message);
+  }
+}
+
+module.exports = { handleGitHubOAuth };

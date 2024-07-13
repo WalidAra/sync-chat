@@ -12,8 +12,9 @@ const initialState: Props = {
     id: "",
     name: "",
     email: "",
-    image: "",
+    image: null,
     createdAt: "",
+    bio: null,
   },
 };
 
@@ -31,8 +32,9 @@ const userSlice = createSlice({
         id: "",
         name: "",
         email: "",
-        image: "",
+        image: null,
         createdAt: "",
+        bio: null,
       };
     },
   },

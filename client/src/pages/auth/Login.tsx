@@ -1,3 +1,6 @@
+/* eslint-disable no-empty */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/rules-of-hooks */
 import {
   FormControl,
   FormLabel,
@@ -12,18 +15,25 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { useFetch } from "../../hooks/useFetch";
+import { useDispatch } from "react-redux";
+import { setProfile } from "../../features/state_management/slices/user.slice";
+import { Client } from "../../types";
+import { useAuth } from "../../hooks/useAuth";
 
 const schema = z.object({
   email: z.string().email("Invalid email format"),
   password: z
     .string()
-    .min(8, "Password should be at least 8 characters")
+    .min(6, "Password should be at least 6 characters")
     .max(20, "Password should not exceed 20 characters"),
 });
 
 const Login: React.FC = () => {
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const { setToken } = useAuth();
 
   const {
     handleSubmit,
@@ -41,24 +51,24 @@ const Login: React.FC = () => {
     setIsLoading(true);
     setError("");
 
+    // fetch , if response is ok them log result else set error ,
+
     try {
-      const response = await fetch(
-        "http://localhost:2000/api/auth/public/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await useFetch({
+        feature: "/auth",
+        method: "POST",
+        body: data,
+        endPoint: "/login",
+        token: null,
+      });
 
-      const result = await response.json();
-
-      if (response.ok) {
-        console.log("Login successful:", result);
-      } else {
-        setError(result.message);
+      if (response.status === true) {
+        const { token, ...userData } = response.data;
+        localStorage.setItem("sync-token", token);
+        dispatch(
+          setProfile({ isLoggedIn: response.status, user: userData as Client })
+        );
+        setToken(token);
       }
     } catch (err) {
       setError("An error occurred.");

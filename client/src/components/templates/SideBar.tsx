@@ -1,9 +1,10 @@
 import { Box, Flex, IconButton } from "@chakra-ui/react";
 import { FaPhoneAlt, FaUserFriends } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
-import { IoChatbubbles, IoLogOut } from "react-icons/io5";
+import { IoChatbubbles } from "react-icons/io5";
 import ThemeToggler from "../molecules/ThemeToggler";
 import Logo from "../atoms/Logo";
+import LogOutIconButton from "../molecules/LogOutIconButton";
 
 const SideBar = () => {
   return (
@@ -20,7 +21,7 @@ const SideBar = () => {
       bg="background.100"
       borderColor={"border.100"}
       justifyContent={"space-between"}
-      alignItems={'center'}
+      alignItems={"center"}
       py={4}
       px={2}
     >
@@ -75,15 +76,7 @@ const SideBar = () => {
           fontSize="20px"
           icon={<IoMdSettings />}
         />
-        <IconButton
-          isRound={true}
-          variant="ghost"
-          colorScheme="blackAlpha"
-          aria-label="Done"
-          color={"red"}
-          fontSize="20px"
-          icon={<IoLogOut />}
-        />
+        <LogOutIconButton />
       </Flex>
 
       <ThemeToggler />

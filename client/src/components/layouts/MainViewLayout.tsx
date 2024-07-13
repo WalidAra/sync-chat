@@ -4,8 +4,8 @@ import React from "react";
 import NavBar from "../templates/NavBar";
 import ChatPanel from "../templates/ChatPanel";
 import ChatInfoProvider from "../../providers/ChatInfoProvider";
-import ChatInfoDrawer from "../organisms/ChatInfoDrawer";
 import MainView from "../atoms/MainView";
+import MessageInputBox from "../organisms/MessageInputBox";
 
 const MainViewLayout = ({
   children,
@@ -22,17 +22,19 @@ const MainViewLayout = ({
     <Flex w={"100%"} h={"100vh"} ml={"14"}>
       <ChatPanel />
       <ChatInfoProvider>
-        <MainView
-          {...props}
+        <Flex
           className="chat-bg"
-          overflow={"auto"}
-          position={"relative"}
+          w={"100%"}
+          flexDir={"column"}
+          borderBottomWidth={"1px"}
         >
-          <NavBar />
-          {children}
-        </MainView>
+          <MainView {...props} overflow={"auto"} position={"relative"}>
+            <NavBar />
+            {children}
+          </MainView>
 
-        {/* <ChatInfoDrawer isGroup /> */}
+          <MessageInputBox />
+        </Flex>
       </ChatInfoProvider>
     </Flex>
   );

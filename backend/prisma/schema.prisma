@@ -30,7 +30,6 @@ model User {
   Message    Message[]
   Chat       Chat[]
   Friend  Friend[]
-  Attachment Attachment[]
   Member     Member[]
   Block Block[]
 }
@@ -48,11 +47,6 @@ model Attachment {
   id     String   @id @default(uuid())
   url    String   @unique
   type   FileType
-  userId String
-  chatId String
-
-  User               User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Chat               Chat                 @relation(fields: [chatId], references: [id], onDelete: Cascade)
   MessageAttachments MessageAttachments[]
 }
 
@@ -75,7 +69,6 @@ model Chat {
   admin     User?     @relation(fields: [adminId], references: [id], onDelete: Cascade)
 
   Message    Message[]
-  Attachment Attachment[]
   Member     Member[]
 
   @@unique([adminId])

@@ -9,14 +9,17 @@ const Chats = () => {
     <MainViewLayout chatId={chatId as string}>
       <MessageCard isMyMsg={false} />
       <MessageCard isMyMsg={false} />
+      
       <MessageCard isMyMsg={false} />
       <MessageCard isMyMsg={true} />
       <MessageCard isMyMsg={false} />
       <MessageCard isMyMsg={false} />
+
       <MessageCard isMyMsg={true} />
       <MessageCard isMyMsg={false} />
       <MessageCard isMyMsg={false} />
       <MessageCard isMyMsg={false} />
+
       <MessageCard isMyMsg={true} />
       <MessageCard isMyMsg={false} />
       <MessageCard isMyMsg={false} />

@@ -10,14 +10,18 @@ async function handleGoogleOAuth(profile) {
   try {
     let existUser = await prisma.user.findUnique({
       where: { email },
-      include: {
-        Provider: true,
+      select: {
+        id: true,
+        bio: true,
+        email: true,
+        image: true,
+        createdAt: true,
+        name: true,
       },
     });
 
-    const pwHash = generateRandomChars(16);
-
-    if (!existUser || (existUser && existUser.Provider.name === "Github")) {
+    if (!existUser) {
+      const pwHash = generateRandomChars(16);
       const provider = await prisma.provider.findFirst({
         where: { name: "Google" },
       });
@@ -47,11 +51,9 @@ async function handleGoogleOAuth(profile) {
       };
     }
 
-    const { Provider, lastLoginAt, updatedAt, password, ...user } = existUser;
-
-    const token = JwtHelper.generateToken({ id: user.id }, true);
+    const token = JwtHelper.generateToken({ id: existUser.id }, true);
     return {
-      ...user,
+      ...existUser,
       token,
     };
   } catch (error) {
@@ -60,12 +62,12 @@ async function handleGoogleOAuth(profile) {
 }
 
 async function handleGitHubOAuth(profile) {
-  
-  const { username, emails } = profile;
+  const { username, emails, photos } = profile;
   const email = emails[0].value;
+  const image = photos && photos.length > 0 ? photos[0].value : null; 
 
   try {
-    let user = await prisma.user.findUnique({
+    let existUser = await prisma.user.findUnique({
       where: { email },
       select: {
         id: true,
@@ -77,18 +79,19 @@ async function handleGitHubOAuth(profile) {
       },
     });
 
-    const pwHash = generateRandomChars(16);
-    const provider = await prisma.provider.findFirst({
-      where: { name: "Github" },
-    });
+    if (!existUser) {
+      const pwHash = generateRandomChars(16);
+      const provider = await prisma.provider.findFirst({
+        where: { name: "Github" },
+      });
 
-    if (!user || (user && user.provider.name === "Google")) {
-      user = await prisma.user.create({
+      const newUser = await prisma.user.create({
         data: {
           name: username.trim(),
           email,
           password: pwHash,
           providerId: provider.id,
+          image,
         },
         select: {
           id: true,
@@ -99,12 +102,19 @@ async function handleGitHubOAuth(profile) {
           name: true,
         },
       });
+
+      const token = JwtHelper.generateToken({ id: newUser.id }, true);
+
+      return {
+        ...newUser,
+        token,
+      };
     }
 
-    const token = JwtHelper.generateToken({ id: user.id }, true);
+    const token = JwtHelper.generateToken({ id: existUser.id }, true);
 
     return {
-      ...user,
+      ...existUser,
       token,
     };
   } catch (error) {

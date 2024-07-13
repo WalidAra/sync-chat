@@ -36,7 +36,7 @@ passport.use(
     },
     async function (accessToken, refreshToken, profile, cb) {
       try {
-        const data = await handleGitHubOAuth(profile, accessToken);
+        const data = await handleGitHubOAuth(profile);
         return cb(null, data);
       } catch (error) {
         return cb(error, null);

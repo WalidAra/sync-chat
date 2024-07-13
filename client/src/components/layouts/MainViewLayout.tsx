@@ -1,20 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  Avatar,
-  Box,
-  BoxProps,
-  Button,
-  Flex,
-  IconButton,
-  Input,
-} from "@chakra-ui/react";
+import { BoxProps, Flex } from "@chakra-ui/react";
 import React from "react";
 import NavBar from "../templates/NavBar";
 import ChatPanel from "../templates/ChatPanel";
 import ChatInfoProvider from "../../providers/ChatInfoProvider";
 import MainView from "../atoms/MainView";
-import { LuLink, LuMic } from "react-icons/lu";
-import { HiOutlineEmojiHappy } from "react-icons/hi";
 import MessageInputBox from "../organisms/MessageInputBox";
 
 const MainViewLayout = ({

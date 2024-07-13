@@ -1,6 +1,7 @@
-import { Box, Flex, Avatar, Input, IconButton, Button } from '@chakra-ui/react';
-import { HiOutlineEmojiHappy } from 'react-icons/hi';
-import { LuLink, LuMic } from 'react-icons/lu';
+import { Box, Flex, Input, IconButton, Button } from "@chakra-ui/react";
+import { HiOutlineEmojiHappy } from "react-icons/hi";
+import { LuLink, LuMic } from "react-icons/lu";
+import MessageBoxAvatar from "../utils/MessageBoxAvatar";
 
 const MessageInputBox = () => {
   return (
@@ -11,7 +12,6 @@ const MessageInputBox = () => {
       position={"relative"}
       bg={"transparent"}
     >
-      {/* <Box position={"absolute"} w={"100%"} top={0} left={0}></Box> */}
 
       <Flex
         gap={2}
@@ -24,7 +24,7 @@ const MessageInputBox = () => {
         borderWidth={"1px"}
       >
         <Flex alignItems={"center"} gap={0}>
-          <Avatar size={"sm"} />
+          <MessageBoxAvatar />
           <Input
             size={"sm"}
             type="text"
@@ -95,6 +95,6 @@ const MessageInputBox = () => {
       </Flex>
     </Box>
   );
-}
+};
 
-export default MessageInputBox
+export default MessageInputBox;

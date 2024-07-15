@@ -10,8 +10,7 @@ import AuthLayout from "../components/layouts/AuthLayout";
 import NotFound from "../pages/NotFound";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
-import Chats from "../pages/Chats";
-import GroupChats from "../pages/GroupChats";
+import ConversationPanel from "../pages/ConversationPanel";
 import Middleware from "../components/utils/Middleware";
 import ProfileProvider from "../providers/ProfileProvider";
 
@@ -29,8 +28,7 @@ const AppRouter = () => {
                 </HomeLayout>
               }
             >
-              <Route path="chats/:chatId" element={<Chats />} />
-              <Route path="groups/:groupId" element={<GroupChats />} />
+              <Route path="chats/:chatId" element={<ConversationPanel />} />
             </Route>
 
             <Route

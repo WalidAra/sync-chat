@@ -30,9 +30,6 @@ router.get(
   passport.authenticate("github", { session: false }),
   (req, res) => {
 
-    console.log('====================================');
-    console.log(req.user);
-    console.log('====================================');
     if (req.user && req.user.token) {
       res.redirect(`http://localhost:5173/?token=${req.user.token}`);
     } else {

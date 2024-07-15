@@ -3,6 +3,7 @@ const RedisHelper = require("../helpers/redis.helper");
 const redisHelper = new RedisHelper();
 
 // ! CHAT ID IS THE ROOM NAME
+// ** AC_ is for the activated users
 
 const socketInitializer = (httpServer) => {
   const io = new Server(httpServer, {
@@ -34,9 +35,6 @@ const socketInitializer = (httpServer) => {
     });
 
     socket.on("disconnect", () => {
-      console.log('====================================');
-      console.log('user disconnected');
-      console.log('====================================');
       redisHelper.delete(`AC_${socket.id}`);
     });
 

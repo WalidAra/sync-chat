@@ -1,3 +1,4 @@
+const prisma = require("../../../config/prisma");
 const { createMessage } = require("./models/message.model");
 
 const createMessageController = async (req, res) => {
@@ -27,4 +28,44 @@ const createMessageController = async (req, res) => {
   }
 };
 
-module.exports = { createMessageController };
+const getLastMessages = async (req, res) => {
+  const { id } = req.user;
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id },
+      include: {
+        Chat: {
+          include: {
+            Message: {
+              where: { isDeleted: false },
+              orderBy: { createdAt: "desc" },
+              take: 1,
+            },
+          },
+        },
+      },
+    });
+
+    const lastMessages = user.Chat.map((chat) => ({
+      chatId: chat.id,
+      chatName: chat.name,
+      lastMessage: chat.Message[0],
+    }));
+
+    res.status(200).json({
+      status: true,
+      message: "Last messages retrieved successfully",
+      data: lastMessages,
+    });
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({
+      status: false,
+      message: "Internal Server Error",
+      data: null,
+    });
+  }
+};
+
+module.exports = { createMessageController, getLastMessages };

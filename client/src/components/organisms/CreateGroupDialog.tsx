@@ -12,9 +12,16 @@ import {
   Button,
   Text,
   AlertDialogCloseButton,
-  
+  Flex,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Box,
+  Stack,
+  Avatar,
+  Heading,
 } from "@chakra-ui/react";
-import { LuPenSquare } from "react-icons/lu";
+import { LuPenSquare, LuSearch } from "react-icons/lu";
 
 const CreateGroupDialog = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -39,24 +46,74 @@ const CreateGroupDialog = () => {
       >
         <AlertDialogOverlay>
           <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Create New Group Chat
-              <Text fontSize={"14px"} color={"gray.600"} fontWeight={"400"}>
-                Enter a name for your new group and add people to invite.
-              </Text>
+            <AlertDialogHeader
+              display={"flex"}
+              flexDir={"column"}
+              gap={2}
+              px={0}
+              fontSize="lg"
+              fontWeight="bold"
+            >
+              <Flex flexDir={"column"} px={6}>
+                New message.
+                <Text fontSize={"14px"} color={"gray.600"} fontWeight={"400"}>
+                  Invite a user to this thread. This will create a new group
+                  message.
+                </Text>
+              </Flex>
+              <InputGroup>
+                <InputLeftElement pointerEvents="none">
+                  <LuSearch color="gray.300" />
+                </InputLeftElement>
+                <Input type="tel" placeholder="Phone number" />
+              </InputGroup>
             </AlertDialogHeader>
             <AlertDialogCloseButton />
 
             <AlertDialogBody>
-              Are you sure? You can't undo this action afterwards.
+              <Box height={"260px"} overflow={"auto"}>
+                <Flex mb={3} flex="1" gap="4" alignItems="center">
+                  <Avatar
+                    name="Segun Adebayo"
+                    src="https://bit.ly/sage-adebayo"
+                    size={"sm"}
+                  />
+
+                  <Box>
+                    <Heading size="sm">Segun Adebayo</Heading>
+                    <Text>Creator, Chakra UI</Text>
+                  </Box>
+                </Flex>
+              </Box>
             </AlertDialogBody>
 
-            <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose}>
-                Cancel
-              </Button>
+            <AlertDialogFooter
+              display={"flex"}
+              justifyContent={"space-between"}
+              alignItems={"center"}
+              borderTopWidth={"1px"}
+            >
+              <Stack
+                display={"flex"}
+                direction="row"
+                w={"70%"}
+                overflow={"auto"}
+              >
+                <Avatar
+                  size={"sm"}
+                  name="Oshigaki Kisame"
+                  src="https://bit.ly/broken-link"
+                />
+                <Avatar
+                  size={"sm"}
+                  name="Sasuke Uchiha"
+                  src="https://bit.ly/broken-link"
+                />
+                <Avatar size={"sm"} src="https://bit.ly/broken-link" />
+              </Stack>
+
               <Button colorScheme="blue" bg={"primary.100"} ml={3}>
-                Create
+                Continue
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>

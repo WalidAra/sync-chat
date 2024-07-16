@@ -1,6 +1,5 @@
 const { Server } = require("socket.io");
-const RedisHelper = require("../helpers/redis.helper");
-const redisHelper = new RedisHelper();
+const { redisHelper } = require("./redisHelper");
 
 // ! CHAT ID IS THE ROOM NAME
 // ** AC_ is for the activated users

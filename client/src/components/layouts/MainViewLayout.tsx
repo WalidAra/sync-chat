@@ -26,7 +26,6 @@ const MainViewLayout = ({
           className="chat-bg"
           w={"100%"}
           flexDir={"column"}
-          borderBottomWidth={"1px"}
         >
           <MainView {...props} overflow={"auto"} position={"relative"}>
             <NavBar />

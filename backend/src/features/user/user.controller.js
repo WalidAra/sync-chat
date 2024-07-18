@@ -1,6 +1,36 @@
 const prisma = require("../../../config/prisma");
 const bcrypt = require("bcrypt");
 
+exports.getAllUsers = async (req, res) => {
+  const { id } = req.user;
+
+  try {
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        bio: true,
+        email: true,
+        image: true,
+        createdAt: true,
+        name: true,
+      },
+    });
+
+    res.status(200).json({
+      status: true,
+      message: "Users retrieved successfully",
+      data: users,
+    });
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({
+      status: false,
+      message: "Internal Server Error",
+      data: null,
+    });
+  }
+};
+
 exports.profile = async (req, res) => {
   const { id } = req.user;
 

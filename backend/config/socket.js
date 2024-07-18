@@ -1,8 +1,10 @@
 const { Server } = require("socket.io");
 const { redisHelper } = require("./redisHelper");
+const { getUserFriends } = require("../src/features/user/models/friend.model");
 
 // ! CHAT ID IS THE ROOM NAME
 // ** AC_ is for the activated users
+// ** LM_ is for the last message of a user
 
 const socketInitializer = (httpServer) => {
   const io = new Server(httpServer, {
@@ -13,7 +15,6 @@ const socketInitializer = (httpServer) => {
   });
 
   io.on("connection", (socket) => {
-    console.log("new user connected");
 
     socket.on("user-activated", (obj) => {
       if (obj.id) {
@@ -36,7 +37,13 @@ const socketInitializer = (httpServer) => {
           })
         );
 
-        console.log(activeClients);
+        const clientFriends = await getUserFriends(id);
+
+        const onlineFriends = activeClients.filter((client) => {
+          return clientFriends.some((friend) => friend.User.id === client.userId);
+        });
+        
+        io.to(socket.id).emit("online-friends", onlineFriends);
       }
     });
 
@@ -52,6 +59,7 @@ const socketInitializer = (httpServer) => {
     socket.on("create-or-join-room", (obj) => {
       // {id:string , socketId: string , chatId:string}
     });
+    
   });
 };
 

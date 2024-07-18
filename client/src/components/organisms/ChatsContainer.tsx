@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Box,
   Flex,
@@ -9,10 +11,35 @@ import {
 import { LuHash, LuSearch } from "react-icons/lu";
 import MessageBox from "../molecules/MessageBox";
 import CreateGroupDialog from "./CreateGroupDialog";
-// import { useState } from "react";
+import MessageSection from "../molecules/MessageSection";
+import { useEffect } from "react";
+import { useState } from "react";
+import { useAuth } from "../../hooks/useAuth";
+import { useFetch } from "../../hooks/useFetch";
 
 const ChatsContainer = () => {
   //   const [searchValue, setSearchValue] = useState<false>(false);
+  const [userMessages, setUserMessages] = useState<object[]>([]);
+  const { token } = useAuth();
+
+  useEffect(() => {
+    const getUserMessages = async () => {
+      const res = await useFetch({
+        feature: "/user",
+        method: "GET",
+        endPoint: "/chats",
+        token,
+      });
+
+      if (res.status === true) {
+        setUserMessages(res.data);
+      }
+    };
+
+    if (token) {
+      getUserMessages();
+    }
+  }, [token]);
 
   return (
     <Box w={"100%"} display={"flex "} flexDir={"column"} px={1}>
@@ -36,58 +63,22 @@ const ChatsContainer = () => {
         <Input type="tel" placeholder="Search anything" />
       </InputGroup>
 
-      <Flex mt={4} flexDir={"column"} gap={3} as="section">
-        <Text
-          fontWeight={500}
-          fontSize={"14px"}
-          as={"span"}
-          display={"flex"}
-          gap={2}
-          alignItems={"center"}
-        >
-          <Box bg={"primary.100"} rounded={"4px"} p={1}>
-            <LuHash />
-          </Box>
-          GROUPS & CHANNELS
-        </Text>
-        <Box w={"100%"} display={"flex"} flexDir={"column"}>
-          <MessageBox />
-        </Box>
-      </Flex>
-      <Flex mt={4} flexDir={"column"} gap={3} as="section">
-        <Text
-          fontWeight={500}
-          fontSize={"14px"}
-          as={"span"}
-          display={"flex"}
-          gap={2}
-          alignItems={"center"}
-        >
-          ALL MESSAGES
-        </Text>
-        <Box w={"100%"} display={"flex"} flexDir={"column"}>
-          <MessageBox isBordered />
-          <MessageBox isBordered />
-          <MessageBox isBordered />
-          <MessageBox isBordered />
-          <MessageBox isBordered />
-          <MessageBox isBordered />
-          <MessageBox isBordered />
-          <MessageBox isBordered />
-          <MessageBox isBordered />
-          <MessageBox isBordered />
-          <MessageBox isBordered />
-          <MessageBox isBordered />
-          <MessageBox isBordered />
-          <MessageBox isBordered />
-          <MessageBox isBordered />
-          <MessageBox isBordered />
-          <MessageBox isBordered />
-          <MessageBox isBordered />
-          <MessageBox isBordered />
-          <MessageBox isBordered />
-        </Box>
-      </Flex>
+      <MessageSection
+        title={
+          <>
+            <Box bg={"primary.100"} rounded={"4px"} p={1}>
+              <LuHash />
+            </Box>
+            GROUPS & CHANNELS;
+          </>
+        }
+      >
+        <MessageBox />
+      </MessageSection>
+
+      <MessageSection title="ALL MESSAGES">
+        <MessageBox isBordered />
+      </MessageSection>
     </Box>
   );
 };

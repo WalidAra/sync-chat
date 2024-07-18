@@ -1,23 +1,11 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import FreshStartNote from "../../components/molecules/FreshStartNote";
+import ChatPanel from "../../components/templates/ChatPanel";
 
 const FreshStart = () => {
   return (
     <Flex w={"100%"} h={"100vh"} ml={"14"}>
-      <Box
-        w={"320px"}
-        h={"100vh"}
-        display={"flex"}
-        flexDir={"column"}
-        borderRightWidth="1px"
-        flexShrink={0}
-        py={2}
-        px={3}
-        gap={2}
-        overflow={"auto"}
-      >
-        <FreshStartNote />
-      </Box>
+      <ChatPanel />
 
       <Flex
         justifyContent={"center"}

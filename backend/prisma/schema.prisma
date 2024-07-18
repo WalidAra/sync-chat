@@ -70,8 +70,6 @@ model Chat {
 
   Message    Message[]
   Member     Member[]
-
-  @@unique([adminId])
 }
 
 model Member {

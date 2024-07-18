@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
-import MainViewLayout from "../components/layouts/MainViewLayout";
-import MessageCard from "../components/molecules/MessageCard";
+import MainViewLayout from "../../components/layouts/MainViewLayout";
+import MessageCard from "../../components/molecules/MessageCard";
 
 const ConversationPanel = () => {
   const { chatId } = useParams();

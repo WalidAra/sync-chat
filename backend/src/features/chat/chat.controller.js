@@ -1,8 +1,12 @@
 const prisma = require("../../../config/prisma");
+const {
+  getUserLastChatModel,
+  storeUserLastChat,
+} = require("./models/chat.model");
+
 const { createMemberOfChat } = require("./models/member.model");
 
 exports.createChat = async (req, res) => {
-  
   const { id } = req.user; // adminId
 
   const { name, isGroup, members } = req.body;
@@ -89,10 +93,62 @@ exports.removeChat = async (req, res) => {
       message: "Chat deleted successfully",
       data: chat,
     });
-    
   } catch (error) {
     console.error(error.message);
     res.status(500).send({
+      status: false,
+      message: "Internal server error",
+      data: null,
+    });
+  }
+};
+
+exports.getUserLastChat = async (req, res) => {
+  const { id } = req.user;
+
+  try {
+    const lastChat = await getUserLastChatModel(id);
+
+    if (!lastChat) {
+      res.status(200).json({
+        status: false,
+        message: "No chat found",
+        data: {
+          noStoredChat: true,
+        },
+      });
+    } else {
+      res.status(200).json({
+        status: true,
+        message: "Chat fetched successfully",
+        data: lastChat,
+      });
+    }
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({
+      status: false,
+      message: "Internal server error",
+      data: null,
+    });
+  }
+};
+
+exports.createUserLastChat = async (req, res) => {
+  const { id } = req.user;
+  const { chatId } = req.body;
+
+  try {
+    await storeUserLastChat(id, chatId);
+
+    res.status(200).json({
+      status: true,
+      message: "Chat stored successfully",
+      data: null,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({
       status: false,
       message: "Internal server error",
       data: null,

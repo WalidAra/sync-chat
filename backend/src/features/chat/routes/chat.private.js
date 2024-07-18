@@ -1,4 +1,4 @@
-const { createChat, removeChat } = require("../chat.controller");
+const { createChat } = require("../chat.controller");
 const {
   createMessageController,
   getLastMessages,

@@ -1,6 +1,5 @@
 const { Server } = require("socket.io");
-const RedisHelper = require("../helpers/redis.helper");
-const redisHelper = new RedisHelper();
+const { redisHelper } = require("./redisHelper");
 
 // ! CHAT ID IS THE ROOM NAME
 // ** AC_ is for the activated users
@@ -20,16 +19,23 @@ const socketInitializer = (httpServer) => {
       if (obj.id) {
         redisHelper.set(
           `AC_${socket.id}`,
-          JSON.stringify({ connectedAt: obj.connectedAt, socketId: obj.id })
+          JSON.stringify({ connectedAt: obj.connectedAt, userId: obj.id })
         );
       }
     });
 
     socket.on("user-online", async (id) => {
       if (id) {
-        const activeClients = await redisHelper.keys("AC_*");
-        // fetch friends of user using user id
-        // filtering the users based on activeClients
+        const activeClientsKeys = await redisHelper.keys("AC_*");
+        const activeClients = await Promise.all(
+          activeClientsKeys.map(async (key) => {
+            const value = await redisHelper.get(key);
+            const obj = JSON.parse(value);
+            obj.key = key;
+            return obj;
+          })
+        );
+
         console.log(activeClients);
       }
     });

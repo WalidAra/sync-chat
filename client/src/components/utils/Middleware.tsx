@@ -32,7 +32,6 @@ const Middleware = ({ children }: { children: React.ReactNode }) => {
     }
   }, [token]);
 
-  // Redirect conditions
   if (!token) {
     if (pathname !== "/auth/login" && pathname !== "/auth/register") {
       return <Navigate to="/auth/login" />;

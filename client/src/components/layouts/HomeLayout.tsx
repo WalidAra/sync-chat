@@ -4,8 +4,7 @@ import SideBar from "../templates/SideBar";
 import { Flex } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../features/state_management/store/store";
-import { io } from "socket.io-client";
-const socket = io("http://localhost:2000/");
+import socket from "../../utils/socket";
 
 const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   const user = useSelector((state: RootState) => state.user).user;
@@ -20,11 +19,10 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
       connectedAt: new Date(Date.now()),
     });
 
-    socket.emit("user-online", user.id);
-
     return () => {
       socket.off("connect");
     };
+    
   }, [user.id]);
 
   return (

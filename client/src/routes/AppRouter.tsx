@@ -30,7 +30,7 @@ const AppRouter = () => {
               </HomeLayout>
             }
           >
-            <Route path="/" element={<FreshStart />} />
+            <Route index element={<FreshStart />} />
             <Route path="chats/:chatId" element={<ConversationPanel />} />
             <Route path="find-friends" element={<FindFriends />} />
           </Route>

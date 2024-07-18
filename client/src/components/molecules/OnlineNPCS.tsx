@@ -1,6 +1,24 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Avatar, Box, Stack } from "@chakra-ui/react";
+import socket from "../../utils/socket";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../features/state_management/store/store";
 
 const OnlineNPCS = () => {
+  const { id } = useSelector((state: RootState) => state.user).user;
+  const [onlineFriends, setOnlineFriends] = useState<object[]>([]);
+
+  useEffect(() => {
+    socket.on("online-friends", (data) => {
+      setOnlineFriends(data);
+      console.log("friends : ", data);
+    });
+
+    socket.emit("user-online", id);
+  }, [id]);
+
   return (
     <Box>
       <Stack
@@ -10,11 +28,15 @@ const OnlineNPCS = () => {
         borderBottomWidth={"1px"}
         overflow={"auto"}
       >
-        <Avatar name="Oshigaki Kisame" src="https://bit.ly/broken-link" />
-        <Avatar name="Sasuke Uchiha" src="https://bit.ly/broken-link" />
-        <Avatar name="Dan Abrahmov" src="https://bit.ly/dan-abramov" />
-        <Avatar name="Kent Dodds" src="https://bit.ly/kent-c-dodds" />
-        <Avatar name="Prosper Otemuyiwa" src="https://bit.ly/prosper-baba" />
+        {onlineFriends.length > 0 ? (
+          onlineFriends.map((u: any) => {
+            return (
+              <Avatar name="Oshigaki Kisame" src="https://bit.ly/broken-link" />
+            );
+          })
+        ) : (
+          <div>u have no friends loser</div>
+        )}
       </Stack>
     </Box>
   );

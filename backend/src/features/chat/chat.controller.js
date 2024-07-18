@@ -58,7 +58,16 @@ exports.getUSerChats = async (req, res) => {
             },
           },
           include: {
-            User: true,
+            User: {
+              select: {
+                id: true,
+                bio: true,
+                email: true,
+                image: true,
+                createdAt: true,
+                name: true,
+              },
+            },
           },
         },
       },

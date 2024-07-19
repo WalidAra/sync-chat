@@ -5,6 +5,7 @@ import { IoChatbubbles } from "react-icons/io5";
 import ThemeToggler from "../molecules/ThemeToggler";
 import Logo from "../atoms/Logo";
 import LogOutIconButton from "../molecules/LogOutIconButton";
+import { GoBellFill } from "react-icons/go";
 
 const SideBar = () => {
   return (
@@ -75,6 +76,14 @@ const SideBar = () => {
           aria-label="Done"
           fontSize="20px"
           icon={<IoMdSettings />}
+        />
+        <IconButton
+          isRound={true}
+          variant="ghost"
+          colorScheme="blackAlpha"
+          aria-label="Done"
+          fontSize="20px"
+          icon={<GoBellFill />}
         />
         <LogOutIconButton />
       </Flex>

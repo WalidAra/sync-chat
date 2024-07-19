@@ -1,6 +1,7 @@
 const { Server } = require("socket.io");
 const { redisHelper } = require("./redisHelper");
 const { getUserFriends } = require("../src/features/user/models/friend.model");
+const { createMessage } = require("../src/features/chat/models/message.model");
 
 // ! CHAT ID IS THE ROOM NAME
 // ** AC_ is for the activated users
@@ -15,7 +16,6 @@ const socketInitializer = (httpServer) => {
   });
 
   io.on("connection", (socket) => {
-
     socket.on("user-activated", (obj) => {
       if (obj.id) {
         redisHelper.set(
@@ -40,9 +40,11 @@ const socketInitializer = (httpServer) => {
         const clientFriends = await getUserFriends(id);
 
         const onlineFriends = activeClients.filter((client) => {
-          return clientFriends.some((friend) => friend.User.id === client.userId);
+          return clientFriends.some(
+            (friend) => friend.User.id === client.userId
+          );
         });
-        
+
         io.to(socket.id).emit("online-friends", onlineFriends);
       }
     });
@@ -51,15 +53,45 @@ const socketInitializer = (httpServer) => {
       redisHelper.delete(`AC_${socket.id}`);
     });
 
-    socket.on("chat-message", (obj) => {
+    socket.on("chat-message", async (obj) => {
       // {content:string, senderId:string, chatId: string, type:SIMPLE|COMPLEX, attachments:Array }
       // ? call create message function from message model then emit to room
+
+      try {
+        const msg = await createMessage(obj);
+
+        io.to(obj.chatId).emit("chat-message", {
+          status: true,
+          message: "Message sent successfully",
+          data: msg,
+        });
+      } catch (error) {
+        io.to(obj.chatId).emit("chat-message", {
+          status: false,
+          message: "Internal Server Error",
+          data: null,
+        });
+      }
     });
 
-    socket.on("create-or-join-room", (obj) => {
+    socket.on("create-or-join-room", async (obj) => {
       // {id:string , socketId: string , chatId:string}
+      const roomName = obj.chatId;
+      const rooms = await io.sockets.adapter.rooms;
+      const roomExists = rooms.has(roomName);
+
+      if (!roomExists) {
+        socket.join(roomName);
+        io.to(roomName).emit("room-created", roomName);
+      } else {
+        socket.join(roomName);
+        io.to(roomName).emit("room-joined", roomName);
+      }
     });
-    
+
+    socket.on("leave-room", (roomName) => {
+      socket.leave(roomName);
+    });
   });
 };
 

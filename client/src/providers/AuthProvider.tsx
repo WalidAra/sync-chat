@@ -24,6 +24,11 @@ export default function AuthProvider({
 
     if (searchToken) {
       localStorage.setItem("sync-token", searchToken);
+
+      const url = new URL(window.location.toString());
+      url.searchParams.delete("token");
+      window.history.replaceState({}, document.title, url.pathname);
+
       return searchToken;
     }
 

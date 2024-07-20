@@ -2,10 +2,13 @@ const { Server } = require("socket.io");
 const { redisHelper } = require("./redisHelper");
 const { getUserFriends } = require("../src/features/user/models/friend.model");
 const { createMessage } = require("../src/features/chat/models/message.model");
+const prisma = require("./prisma");
 
 // ! CHAT ID IS THE ROOM NAME
 // ** AC_ is for the activated users
 // ** LM_ is for the last message of a user
+
+const userSocketMap = new Map();
 
 const socketInitializer = (httpServer) => {
   const io = new Server(httpServer, {
@@ -17,6 +20,7 @@ const socketInitializer = (httpServer) => {
 
   io.on("connection", (socket) => {
     socket.on("user-activated", (obj) => {
+      userSocketMap.set(obj.id, socket.id);
       if (obj.id) {
         redisHelper.set(
           `AC_${socket.id}`,
@@ -56,9 +60,28 @@ const socketInitializer = (httpServer) => {
     socket.on("chat-message", async (obj) => {
       // {content:string, senderId:string, chatId: string, type:SIMPLE|COMPLEX, attachments:Array }
       // ? call create message function from message model then emit to room
-
       try {
         const msg = await createMessage(obj);
+
+        const notification = {
+          content: msg.data.content,
+          senderId: msg.data.senderId,
+          chatId: msg.data.chatId,
+        };
+
+        const members = await prisma.member.findMany({
+          where: { chatId: obj.chatId },
+          select: { userId: true },
+        });
+
+        members.forEach((member) => {
+          if (member.userId !== obj.senderId) {
+            const socketId = userSocketMap.get(member.userId);
+            if (socketId) {
+              io.to(socketId).emit("new-notification", notification);
+            }
+          }
+        });
 
         io.to(obj.chatId).emit("chat-message", {
           status: true,

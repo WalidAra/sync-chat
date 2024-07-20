@@ -145,3 +145,34 @@ exports.deleteUser = async (req, res) => {
     });
   }
 };
+
+exports.getUserNotifications = async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    const notifications = await prisma.message.findMany({
+      where: {
+        Chat: {
+          Member: {
+            some: { userId },
+          },
+        },
+        NOT: { senderId: userId },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    res.status(200).json({
+      status: true,
+      message: "Notifications retrieved successfully",
+      data: notifications,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({
+      status: false,
+      message: "Internal Server Error",
+      data: null,
+    });
+  }
+};

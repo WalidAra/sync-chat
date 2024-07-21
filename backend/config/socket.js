@@ -55,6 +55,12 @@ const socketInitializer = (httpServer) => {
 
     socket.on("disconnect", () => {
       redisHelper.delete(`AC_${socket.id}`);
+      for (let [userId, socketId] of userSocketMap.entries()) {
+        if (socketId === socket.id) {
+          userSocketMap.delete(userId);
+          break;
+        }
+      }
     });
 
     socket.on("chat-message", async (obj) => {

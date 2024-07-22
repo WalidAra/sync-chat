@@ -1,5 +1,6 @@
 const prisma = require("../../../config/prisma");
 const bcrypt = require("bcrypt");
+const { createFriend } = require("./models/friend.model");
 
 exports.getAllUsers = async (req, res) => {
   const { id } = req.user;
@@ -166,6 +167,29 @@ exports.getUserNotifications = async (req, res) => {
       status: true,
       message: "Notifications retrieved successfully",
       data: notifications,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({
+      status: false,
+      message: "Internal Server Error",
+      data: null,
+    });
+  }
+};
+
+exports.addFriend = async (req, res) => {
+  const { senderId, receiverId } = req.body;
+
+  try {
+    const { sender, receiver } = await createFriend(senderId, receiverId);
+    res.status(200).json({
+      status: true,
+      message: "Friend added successfully",
+      data: {
+        sender,
+        receiver,
+      },
     });
   } catch (error) {
     console.error(error.message);

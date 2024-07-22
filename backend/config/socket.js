@@ -1,6 +1,9 @@
 const { Server } = require("socket.io");
 const { redisHelper } = require("./redisHelper");
-const { getUserFriends } = require("../src/features/user/models/friend.model");
+const {
+  getUserFriends,
+  addFriend,
+} = require("../src/features/user/models/friend.model");
 const { createMessage } = require("../src/features/chat/models/message.model");
 const prisma = require("./prisma");
 
@@ -120,6 +123,33 @@ const socketInitializer = (httpServer) => {
 
     socket.on("leave-room", (roomName) => {
       socket.leave(roomName);
+    });
+
+    socket.on("add-friend", async (obj) => {
+      const { senderId, receiverId } = obj;
+      try {
+        const { sender, receiver } = await addFriend(senderId, receiverId);
+
+        const notification = {
+          content: `${senderId} added you as a friend`,
+          senderId: senderId,
+        };
+
+        const socketId = userSocketMap.get(receiverId);
+        if (socketId) {
+          io.to(socketId).emit("new-notification", {
+            status: true,
+            message: "Message sent successfully",
+            data: notification,
+          });
+        }
+      } catch (error) {
+        io.to(socketId).emit("new-notification", {
+          status: false,
+          message: "Internal Server Error",
+          data: null,
+        });
+      }
     });
   });
 };

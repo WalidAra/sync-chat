@@ -15,6 +15,9 @@ import ProfileProvider from "../providers/ProfileProvider";
 import FreshStart from "../pages/home/FreshStart";
 import FindFriends from "../pages/home/FindFriends";
 import Middleware from "../components/utils/Middleware";
+import NotificationPage from "../pages/NotificationPage";
+
+
 
 const AppRouter = () => {
   return (
@@ -32,6 +35,7 @@ const AppRouter = () => {
           >
             <Route index element={<FreshStart />} />
             <Route path="chats/:chatId" element={<ConversationPanel />} />
+            <Route path="notifications" element={<NotificationPage />} />
             <Route path="find-friends" element={<FindFriends />} />
           </Route>
 

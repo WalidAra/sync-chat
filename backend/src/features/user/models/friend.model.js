@@ -1,5 +1,37 @@
 const prisma = require("../../../../config/prisma");
 
+const createFriend = async (senderId, receiverId) => {
+  try {
+    const sender = await prisma.friend.create({
+      data: {
+        clientId: senderId,
+        userId: receiverId,
+      },
+      select: {
+        id: true,
+        clientId: true,
+        userId: true,
+      },
+    });
+
+    const receiver = await prisma.friend.create({
+      data: {
+        clientId: receiverId,
+        userId: senderId,
+      },
+      select: {
+        id: true,
+        clientId: true,
+        userId: true,
+      },
+    });
+
+    return { sender, receiver };
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
 const getUserFriends = async (id) => {
   try {
     const friends = await prisma.friend.findMany({
@@ -26,7 +58,7 @@ const getUserFriends = async (id) => {
   }
 };
 
-
 module.exports = {
   getUserFriends,
+  createFriend
 };

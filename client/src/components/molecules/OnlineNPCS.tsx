@@ -13,7 +13,6 @@ const OnlineNPCS = () => {
   useEffect(() => {
     socket.on("online-friends", (data) => {
       setOnlineFriends(data);
-      console.log("friends : ", data);
     });
 
     socket.emit("user-online", id);

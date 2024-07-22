@@ -22,6 +22,7 @@ const socketInitializer = (httpServer) => {
   });
 
   io.on("connection", (socket) => {
+    
     socket.on("user-activated", (obj) => {
       userSocketMap.set(obj.id, socket.id);
       if (obj.id) {
@@ -51,6 +52,10 @@ const socketInitializer = (httpServer) => {
             (friend) => friend.User.id === client.userId
           );
         });
+
+        console.log('====================================');
+        console.log(onlineFriends);
+        console.log('====================================');
 
         io.to(socket.id).emit("online-friends", onlineFriends);
       }

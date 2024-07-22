@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Heading, Text, VStack, Spinner } from "@chakra-ui/react";
 import axios from "axios";
-import { useAuth } from "../hooks/useAuth";
-
+import { useAuth } from "../../hooks/useAuth";
 interface Notification {
   content: string;
   senderId: string;

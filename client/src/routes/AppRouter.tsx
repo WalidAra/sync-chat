@@ -15,9 +15,7 @@ import ProfileProvider from "../providers/ProfileProvider";
 import FreshStart from "../pages/home/FreshStart";
 import FindFriends from "../pages/home/FindFriends";
 import Middleware from "../components/utils/Middleware";
-import NotificationPage from "../pages/NotificationPage";
-
-
+import NotificationPage from "../pages/home/NotificationPage";
 
 const AppRouter = () => {
   return (

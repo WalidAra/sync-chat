@@ -1,6 +1,5 @@
-/* eslint-disable no-empty */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
+
 import {
   FormControl,
   FormLabel,
@@ -19,7 +18,8 @@ import { useFetch } from "../../hooks/useFetch";
 import { useDispatch } from "react-redux";
 import { setProfile } from "../../features/state_management/slices/user.slice";
 import { Client } from "../../types";
-import { useAuth } from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { Checkbox } from "@chakra-ui/react";
 
 const schema = z.object({
   email: z.string().email("Invalid email format"),
@@ -33,7 +33,8 @@ const Login: React.FC = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const { setToken } = useAuth();
+  const router = useNavigate();
+  const [isChecked, setIsChecked] = useState<boolean>(false);
 
   const {
     handleSubmit,
@@ -57,10 +58,17 @@ const Login: React.FC = () => {
       const response = await useFetch({
         feature: "/auth",
         method: "POST",
-        body: data,
+        body: {
+          ...data,
+          recall: isChecked,
+        },
         endPoint: "/login",
         token: null,
       });
+
+      console.log('====================================');
+      console.log(response);
+      console.log('====================================');
 
       if (response.status === true) {
         const { token, ...userData } = response.data;
@@ -68,7 +76,7 @@ const Login: React.FC = () => {
         dispatch(
           setProfile({ isLoggedIn: response.status, user: userData as Client })
         );
-        setToken(token);
+        router("/");
       }
     } catch (err) {
       setError("An error occurred.");
@@ -97,6 +105,12 @@ const Login: React.FC = () => {
             <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
           </FormControl>
           {error && <div style={{ color: "red" }}>{error}</div>}
+          <Checkbox
+            checked={isChecked}
+            onChange={() => setIsChecked((prev) => !prev)}
+          >
+            Remember me for 30 days
+          </Checkbox>
           <Button
             _hover={{
               transform: "scale(1.02)",

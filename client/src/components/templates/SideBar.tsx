@@ -6,6 +6,7 @@ import ThemeToggler from "../molecules/ThemeToggler";
 import Logo from "../atoms/Logo";
 import LogOutIconButton from "../molecules/LogOutIconButton";
 import { GoBellFill } from "react-icons/go";
+import { Link } from "react-router-dom";
 
 const SideBar = () => {
   return (
@@ -35,22 +36,26 @@ const SideBar = () => {
           flexDir={"column"}
           display={"flex"}
         >
-          <IconButton
-            isRound={true}
-            variant="ghost"
-            colorScheme="blackAlpha"
-            aria-label="Done"
-            fontSize="20px"
-            icon={<IoChatbubbles />}
-          />
-          <IconButton
-            isRound={true}
-            variant="ghost"
-            colorScheme="blackAlpha"
-            aria-label="Done"
-            fontSize="20px"
-            icon={<FaUserFriends />}
-          />
+          <Link to={"/"}>
+            <IconButton
+              isRound={true}
+              variant="ghost"
+              colorScheme="blackAlpha"
+              aria-label="Done"
+              fontSize="20px"
+              icon={<IoChatbubbles />}
+            />
+          </Link>
+          <Link to={"/find-friends"}>
+            <IconButton
+              isRound={true}
+              variant="ghost"
+              colorScheme="blackAlpha"
+              aria-label="Done"
+              fontSize="20px"
+              icon={<FaUserFriends />}
+            />
+          </Link>
         </Box>
 
         <Box
@@ -69,22 +74,26 @@ const SideBar = () => {
           />
         </Box>
 
-        <IconButton
-          isRound={true}
-          variant="ghost"
-          colorScheme="blackAlpha"
-          aria-label="Done"
-          fontSize="20px"
-          icon={<IoMdSettings />}
-        />
-        <IconButton
-          isRound={true}
-          variant="ghost"
-          colorScheme="blackAlpha"
-          aria-label="Done"
-          fontSize="20px"
-          icon={<GoBellFill />}
-        />
+        <Link to={"/settings"}>
+          <IconButton
+            isRound={true}
+            variant="ghost"
+            colorScheme="blackAlpha"
+            aria-label="Done"
+            fontSize="20px"
+            icon={<IoMdSettings />}
+          />
+        </Link>
+        <Link to={'/notifications'} >
+          <IconButton
+            isRound={true}
+            variant="ghost"
+            colorScheme="blackAlpha"
+            aria-label="Done"
+            fontSize="20px"
+            icon={<GoBellFill />}
+          />
+        </Link>
         <LogOutIconButton />
       </Flex>
 

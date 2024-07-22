@@ -5,7 +5,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import { useFetch } from "../../hooks/useFetch";
 
 const config = {
-  matchers: ["/auth/login", "/auth/register", "/"],
+  matchers: ["/auth/login", "/auth/register"],
 };
 
 const Middleware = ({ children }: { children: React.ReactNode }) => {
@@ -39,7 +39,7 @@ const Middleware = ({ children }: { children: React.ReactNode }) => {
   } else {
     if (config.matchers.includes(pathname) && lastChatId) {
       return <Navigate to={`/chats/${lastChatId}`} />;
-    } else if (pathname.includes("chats") && lastChatId === null) {
+    } else if (pathname.includes("/chats") && lastChatId === null) {
       return <Navigate to="/" />;
     }
   }

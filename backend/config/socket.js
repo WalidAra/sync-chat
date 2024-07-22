@@ -2,7 +2,7 @@ const { Server } = require("socket.io");
 const { redisHelper } = require("./redisHelper");
 const {
   getUserFriends,
-  addFriend,
+  createFriend,
 } = require("../src/features/user/models/friend.model");
 const { createMessage } = require("../src/features/chat/models/message.model");
 const prisma = require("./prisma");
@@ -128,7 +128,7 @@ const socketInitializer = (httpServer) => {
     socket.on("add-friend", async (obj) => {
       const { senderId, receiverId } = obj;
       try {
-        const { sender, receiver } = await addFriend(senderId, receiverId);
+        const { sender, receiver } = await createFriend(senderId, receiverId);
 
         const notification = {
           content: `${senderId} added you as a friend`,
@@ -144,11 +144,7 @@ const socketInitializer = (httpServer) => {
           });
         }
       } catch (error) {
-        io.to(socketId).emit("new-notification", {
-          status: false,
-          message: "Internal Server Error",
-          data: null,
-        });
+        console.error("Error adding friend:", error);
       }
     });
   });

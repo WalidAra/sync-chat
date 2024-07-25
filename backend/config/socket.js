@@ -53,10 +53,6 @@ const socketInitializer = (httpServer) => {
           );
         });
 
-        console.log('====================================');
-        console.log(onlineFriends);
-        console.log('====================================');
-
         io.to(socket.id).emit("online-friends", onlineFriends);
       }
     });

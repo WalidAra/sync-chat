@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 type Props = {
   token: string | null;
@@ -33,6 +33,7 @@ export default function AuthProvider({
     }
 
     const storedToken = localStorage.getItem("sync-token");
+
     return storedToken || null;
   });
 

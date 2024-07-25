@@ -24,7 +24,8 @@ const ProfileProvider = ({ children }: { children: React.ReactNode }) => {
         endPoint: "/profile",
         token,
       });
-      if (response.status) {
+
+      if (response.status) {      
         dispatch(setProfile({isLoggedIn:response.status, user:response.data as Client}));
       } else if (
         response.status === false &&
@@ -48,7 +49,7 @@ const ProfileProvider = ({ children }: { children: React.ReactNode }) => {
     if (token && user.id === "") {
       getUserProfile();
     }
-  }, [token, user.id]);
+  }, [dispatch, toast, token, user.id]);
 
   return <>{children}</>;
 };

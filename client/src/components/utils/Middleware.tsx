@@ -39,7 +39,10 @@ const Middleware = ({ children }: { children: React.ReactNode }) => {
   } else {
     if (config.matchers.includes(pathname) && lastChatId) {
       return <Navigate to={`/chats/${lastChatId}`} />;
-    } else if (pathname.includes("/chats") && lastChatId === null) {
+    } else if (
+      (pathname.includes("chats") || config.matchers.includes(pathname)) &&
+      lastChatId === null
+    ) {
       return <Navigate to="/" />;
     }
   }

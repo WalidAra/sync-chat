@@ -8,7 +8,7 @@ import socket from "../../utils/socket";
 
 const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   const user = useSelector((state: RootState) => state.user).user;
-
+  console.log(user);
   useEffect(() => {
     socket.on("connect", () => {
       console.log("user online");
@@ -22,7 +22,6 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
     return () => {
       socket.off("connect");
     };
-    
   }, [user.id]);
 
   return (

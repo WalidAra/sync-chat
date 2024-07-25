@@ -8,16 +8,19 @@ export const useFetch = async ({
   method,
   body,
   token,
-  feature
+  feature,
 }: Fetch) => {
-
   const header = import.meta.env.VITE_TOKEN_HEADER as string;
   const BASE_URL = import.meta.env.VITE_BASE_URL as string;
+
+  const url = `${BASE_URL}${feature}${
+    token ? "/private" : "/public"
+  }${endPoint}`;
 
   try {
     const axiosConfig: AxiosRequestConfig = {
       method: method.toUpperCase(),
-      url: BASE_URL + feature + (token ? "/private" : "/public") + endPoint,
+      url: url,
       headers: {
         "Content-Type": "application/json",
         ...(token && { [header]: token }),
@@ -28,11 +31,10 @@ export const useFetch = async ({
     const response = await axios(axiosConfig);
     return response.data as FetchResponse;
   } catch (error: any) {
-    
     console.log("====================================");
     console.error(
       `\n====> Error Fetch at : \n ` + "\nurl :",
-      BASE_URL + (token ? "/private" : "/public") + endPoint + "\n\n",
+      url + "\n\n",
       error.message,
       "\n"
     );

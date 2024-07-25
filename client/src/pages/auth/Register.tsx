@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import {
   FormControl,
   FormLabel,
@@ -6,13 +7,16 @@ import {
   Button,
   FormErrorMessage,
   Spinner,
+  Checkbox,
 } from "@chakra-ui/react";
 import AuthForm from "../../components/templates/auth/AuthForm";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { FetchResponse } from "../../types";
+import { useNavigate } from "react-router-dom";
+import { useFetch } from "../../hooks/useFetch";
+import { useAuth } from "../../hooks/useAuth";
 
 const schema = z
   .object({
@@ -38,7 +42,9 @@ const schema = z
 const Register: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-
+  const router = useNavigate();
+  const [isChecked, setIsChecked] = useState<boolean>(false);
+  const {setToken} = useAuth();
   const {
     handleSubmit,
     register,
@@ -62,22 +68,24 @@ const Register: React.FC = () => {
     setError("");
 
     try {
-      const response = await fetch(
-        "http://localhost:2000/api/auth/public/register",
-        {
+
+      const res = await useFetch({
+         feature: "/auth",
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+          body: {
+            ...data,
+            recall: isChecked,
           },
-          body: JSON.stringify(data),
-        }
-      );
+          endPoint: "/register",
+          token: null,
+      });
 
-      const result: FetchResponse = await response.json();
-
-      if (!response.ok) {
-        setError(result.message);
+      if (res.status === true) {
+        localStorage.setItem("sync-token", res.data.token);
+        setToken(res.data.token);
+        router("/");
       }
+
     } catch (err) {
       setError("An error occurred.");
     } finally {
@@ -120,6 +128,12 @@ const Register: React.FC = () => {
             </FormErrorMessage>
           </FormControl>
           {error && <div style={{ color: "red" }}>{error}</div>}
+          <Checkbox
+            checked={isChecked}
+            onChange={() => setIsChecked((prev) => !prev)}
+          >
+            Remember me for 30 days
+          </Checkbox>
           <Button
             _hover={{
               transform: "scale(1.02)",

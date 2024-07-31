@@ -1,9 +1,36 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Box, Flex, Input, IconButton, Button } from "@chakra-ui/react";
 import { HiOutlineEmojiHappy } from "react-icons/hi";
 import { LuLink, LuMic } from "react-icons/lu";
 import MessageBoxAvatar from "../utils/MessageBoxAvatar";
+import { useState } from "react";
+import { useAuth } from "../../hooks/useAuth";
+import socket from "../../utils/socket";
 
-const MessageInputBox = () => {
+type Props = {
+  chatId: string;
+};
+
+const MessageInputBox = ({ chatId }: Props) => {
+  const [msg, setMsg] = useState<string>("");
+  const [type, setType] = useState<"SIMPLE" | "COMPLEX">("SIMPLE");
+  const [attachments, setAttachments] = useState<string[]>([]);
+  const { token } = useAuth();
+
+  const sendMessage = async () => {
+    if (token && msg) {
+      socket.emit("message", {
+        content: msg,
+        token,
+        chatId,
+        type,
+        attachments,
+      });
+    }
+
+    setMsg("");
+  };
+
   return (
     <Box
       w={"100%"}
@@ -12,7 +39,6 @@ const MessageInputBox = () => {
       position={"relative"}
       bg={"transparent"}
     >
-
       <Flex
         gap={2}
         flexDir={"column"}
@@ -26,6 +52,10 @@ const MessageInputBox = () => {
         <Flex alignItems={"center"} gap={0}>
           <MessageBoxAvatar />
           <Input
+            value={msg}
+            onChange={(e) => {
+              setMsg(e.target.value);
+            }}
             size={"sm"}
             type="text"
             placeholder="Type your message..."
@@ -84,10 +114,13 @@ const MessageInputBox = () => {
           </Flex>
 
           <Button
+            onClick={sendMessage}
             size={"sm"}
             bg={"primary.100"}
             color={"white"}
             fontWeight={600}
+            colorScheme="cyan"
+            isDisabled={msg === ""}
           >
             Send
           </Button>

@@ -5,8 +5,8 @@ const {
   markUserDisconnect,
   areMyHommiesOnline,
   sendFriendRequest,
-  getMyFriendRequests,
   acceptFriendRequest,
+  sendMessageToChat,
 } = require("../src/middlewares/socketValidator");
 
 const socketInitializer = (httpServer) => {
@@ -19,10 +19,11 @@ const socketInitializer = (httpServer) => {
 
   io.on("connection", (socket) => {
     markUserActivation(socket);
-    areMyHommiesOnline(socket , io);
+    areMyHommiesOnline(socket, io);
     sendFriendRequest(socket);
     markUserDisconnect(socket);
-    acceptFriendRequest(socket , io);
+    acceptFriendRequest(socket, io);
+    sendMessageToChat(socket, io);
   });
 };
 

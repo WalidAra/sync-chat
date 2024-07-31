@@ -1,5 +1,5 @@
 const prisma = require("../../../../config/prisma");
-const { createAttachments } = require("./attachment.model");
+// const { createAttachments } = require("./attachment.model");
 
 const createMessage = async (obj) => {
   const { content, senderId, chatId, type, attachments } = obj;
@@ -12,6 +12,24 @@ const createMessage = async (obj) => {
         type,
         chatId,
       },
+
+      include: {
+        User: {
+          select: {
+            id: true,
+            bio: true,
+            email: true,
+            image: true,
+            createdAt: true,
+            name: true,
+          },
+        },
+        MessageAttachments: {
+          include: {
+            Attachment: true,
+          },
+        },
+      },
     });
 
     if (type === "SIMPLE") {
@@ -22,14 +40,13 @@ const createMessage = async (obj) => {
       };
     }
 
-    const result = createAttachments(msg.id, attachments);
+    // const result = await createAttachments(msg.id, attachments);
 
-    return {
-      status: true,
-      message: "Message created successfully",
-      data: { result, msg },
-    };
-    
+    // return {
+    //   status: true,
+    //   message: "Message created successfully",
+    //   data: { result, msg },
+    // };
   } catch (error) {
     console.error(error.message);
     return {

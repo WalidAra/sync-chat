@@ -1,37 +1,50 @@
 import { Avatar, Box, Flex, Text } from "@chakra-ui/react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../features/state_management/store/store";
 
 type Props = {
   isMyMsg: boolean;
+  name: string;
+  image: string;
+  content: string;
+  createdAt: string;
 };
 
-const MessageCheck = ({ isMyMsg }: Props) => {
+const MessageCheck = ({ isMyMsg, image, name, content, createdAt }: Props) => {
+  const { user } = useSelector((state: RootState) => state.user);
+
   if (!isMyMsg) {
     return (
       <Flex gap={4}>
-        <Avatar />
+        <Avatar src={image} />
 
         <Box
           display={"inline-flex"}
           flexDir={"column"}
           gap={2}
+          w={"auto"}
           maxWidth={"75%"}
         >
           <Flex justifyContent={"space-between"} alignItems={"center"}>
             <Text fontSize={"14px"} fontWeight={500}>
-              Ezio
+              {name}
             </Text>
-            <Text fontSize={"14px"}>4:40PM</Text>
+            <Text ml={2} fontSize={"14px"}>
+              {" "}
+              {createdAt}{" "}
+            </Text>
           </Flex>
 
           <Box
-            w={"inherit"}
+            mr={"auto"}
+            w={"inline"}
             py={"2"}
             px={4}
             borderRadius={"0 16px 16px 16px"}
             bg={"white"}
             boxShadow={"0 25px 50px -12px rgba(196, 172, 169, 0.25)"}
           >
-            <Text color={'gray.600'} >this is a message for everybody , i m batman</Text>
+            <Text color={"gray.600"}>{content}</Text>
           </Box>
         </Box>
       </Flex>
@@ -41,8 +54,8 @@ const MessageCheck = ({ isMyMsg }: Props) => {
       <Flex flexDir={"column"} gap={2}>
         <Flex gap={2} justifyContent={"flex-end"} alignItems={"center"}>
           <Text fontSize={"14px"}>YOU</Text>
-          <Text fontSize={"14px"}>4:30AM</Text>
-          <Avatar size={"sm"} />
+          <Text fontSize={"14px"}>{createdAt}</Text>
+          <Avatar src={user.image || ""} size={"sm"} />
         </Flex>
 
         <Box
@@ -55,7 +68,7 @@ const MessageCheck = ({ isMyMsg }: Props) => {
           boxShadow={"0 25px 50px -12px rgba(196, 172, 169, 0.25)"}
           ml={"auto"}
         >
-          <Text color={'gray.50'} >this is a message for everybody , i m batman</Text>
+          <Text color={"gray.50"}>{content}</Text>
         </Box>
       </Flex>
     );

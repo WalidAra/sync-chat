@@ -3,23 +3,37 @@ const jwt = require("jsonwebtoken");
 
 // ! CHAT ID IS THE ROOM NAME
 // ** AC_ is for the activated users
+// ** CR is for the created rooms
+// ** LM is for last message
 
 const {
-  getUserFriends,
   createFriendRequest,
-  getFriendRequests,
   removeFriendRequest,
   createFriend,
 } = require("../features/user/models/friend.model");
 
-const { getUserProfile } = require("../features/user/models/user.model");
 const { getUserOnlineFriends } = require("./scripts/socket.script");
+const prisma = require("../../config/prisma");
+const { createMessage } = require("../features/chat/models/message.model");
 
 const markUserActivation = async (socket) => {
   return socket.on("user-activated", async (obj) => {
     if (obj.id) {
       const userId = obj.id;
       redisHelper.set(`AC_${userId}`, socket.id);
+      const chats = await prisma.chat.findMany({
+        where: {
+          Member: {
+            some: {
+              userId: userId,
+            },
+          },
+        },
+      });
+
+      chats.forEach((chat) => {
+        socket.join(chat.id);
+      });
     }
   });
 };
@@ -47,7 +61,7 @@ const markUserDisconnect = async (socket) => {
   });
 };
 
-const acceptFriendRequest = async (socket , io) => {
+const acceptFriendRequest = async (socket, io) => {
   return socket.on("accept-friend-request", async ({ token, senderId }) => {
     try {
       const obj = jwt.verify(token, process.env.JWT_SECRET);
@@ -73,8 +87,8 @@ const acceptFriendRequest = async (socket , io) => {
           });
 
           console.log(targets);
-          await getUserOnlineFriends(socket, senderId , io);
-          await getUserOnlineFriends(socket, receiverId , io);
+          await getUserOnlineFriends(socket, senderId, io);
+          await getUserOnlineFriends(socket, receiverId, io);
         }
       } else {
         console.log("====================================");
@@ -87,13 +101,13 @@ const acceptFriendRequest = async (socket , io) => {
   });
 };
 
-const areMyHommiesOnline = async (socket , io) => {
+const areMyHommiesOnline = async (socket, io) => {
   return socket.on("user-online", async (token) => {
     if (token) {
       try {
         const obj = jwt.verify(token, process.env.JWT_SECRET);
         const userId = obj.id;
-        await getUserOnlineFriends(socket, userId , io);
+        await getUserOnlineFriends(socket, userId, io);
       } catch (error) {
         console.log(error.message);
       }
@@ -129,10 +143,35 @@ const sendFriendRequest = async (socket) => {
   });
 };
 
+const sendMessageToChat = (socket, io) => {
+  return socket.on(
+    "message",
+    async ({ content, token, chatId, type, attachments }) => {
+      try {
+        const obj = jwt.verify(token, process.env.JWT_SECRET);
+        const senderId = obj.id;
+
+        const msg = await createMessage({
+          content,
+          senderId,
+          chatId,
+          type,
+          attachments,
+        });
+
+        io.to(chatId).emit("chat-messages", msg);
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+  );
+};
+
 module.exports = {
   markUserActivation,
   markUserDisconnect,
   areMyHommiesOnline,
   sendFriendRequest,
   acceptFriendRequest,
+  sendMessageToChat,
 };

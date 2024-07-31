@@ -5,12 +5,19 @@ type Props = {
   name: string;
   children?: React.ReactNode;
   gap?: number;
+  src: string ;
 };
 
-const UserShortCutCard = ({ isMsg = false, name, children , gap = 0 }: Props) => {
+const UserShortCutCard = ({
+  isMsg = false,
+  name,
+  children,
+  gap = 0,
+  src
+}: Props) => {
   return (
     <Flex alignItems={"center"} gap={3}>
-      <Avatar size={isMsg ? "md" : "sm"}>
+      <Avatar src={src} size={isMsg ? "md" : "sm"}>
         {isMsg && <AvatarBadge boxSize="1em" bg="green.500" />}
       </Avatar>
 

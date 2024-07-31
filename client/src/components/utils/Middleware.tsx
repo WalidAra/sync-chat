@@ -5,7 +5,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import { useFetch } from "../../hooks/useFetch";
 
 const config = {
-  matchers: ["/auth/login", "/auth/register"],
+  matchers: ["/auth/login", "/auth/register" , "/"],
 };
 
 const Middleware = ({ children }: { children: React.ReactNode }) => {

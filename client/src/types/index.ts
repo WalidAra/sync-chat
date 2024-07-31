@@ -41,3 +41,38 @@ export type FriendRequest = {
     email: string;
   };
 };
+
+export type Chat = {
+  adminId: string | null;
+  createdAt: string;
+  id: string;
+  image: string | null;
+  isGroup: boolean;
+  name: string | null;
+};
+
+export type Member = {
+  id: string;
+  userId: string;
+  chatId: string;
+  joinedAt: string;
+  User: Client;
+};
+
+export type ChatInfo = Chat & {
+  Member: Member[];
+  Message: MessageInfo[];
+};
+
+export type MessageInfo = Message & {
+  User: Client;
+  MessageAttachments: string[];
+};
+
+export type Message = {
+  content: string;
+  senderId: string;
+  chatId: string;
+  type: "SIMPLE" | "COMPLEX";
+  attachments: string[];
+};

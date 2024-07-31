@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Box, Flex, IconButton, Text } from "@chakra-ui/react";
 import UserShortCutCard from "../organisms/UserShortCutCard";
 import { LuPhone, LuSearch } from "react-icons/lu";
@@ -5,7 +6,12 @@ import { PiDotsThreeOutlineVerticalLight } from "react-icons/pi";
 import ToggleDrawer from "../atoms/ToggleDrawer";
 import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 
-const NavBar = () => {
+type Props = {
+  name: string;
+  image: string;
+};
+
+const NavBar = ({ name, image }: Props) => {
   return (
     <Box
       as="header"
@@ -23,7 +29,7 @@ const NavBar = () => {
       alignItems={"center"}
       bg={"transparent"}
     >
-      <UserShortCutCard name="Zenr">
+      <UserShortCutCard src={image || ""} name={name}>
         <Text color={"text.100"} fontSize={"14px"}>
           Online
         </Text>

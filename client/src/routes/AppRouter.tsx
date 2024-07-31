@@ -20,7 +20,7 @@ import FriendRequest from "../pages/home/FriendRequest";
 const AppRouter = () => {
   return (
     <Router>
-      <Middleware>
+      {/* <Middleware> */}
         <ProfileProvider>
           <Routes>
             <Route
@@ -51,7 +51,7 @@ const AppRouter = () => {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </ProfileProvider>
-      </Middleware>
+      {/* </Middleware> */}
     </Router>
   );
 };

@@ -15,14 +15,14 @@ const createAttachments = async (messageId, attachments) => {
       };
     });
 
-    await prisma.messageAttachments.createMany({
+    const result = await prisma.messageAttachments.createMany({
       data: data,
     });
 
     return {
       status: true,
       message: "Attachment created successfully",
-      data: null,
+      data: result,
     };
     
   } catch (error) {

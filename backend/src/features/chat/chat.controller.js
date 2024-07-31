@@ -6,12 +6,99 @@ const {
 
 const { createMemberOfChat } = require("./models/member.model");
 
+exports.getChatInfo = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const chat = await prisma.chat.findUnique({
+      where: {
+        id: id,
+      },
+
+      include: {
+        Member: {
+          include: {
+            User: {
+              select: {
+                id: true,
+                bio: true,
+                email: true,
+                image: true,
+                createdAt: true,
+                name: true,
+              },
+            },
+          },
+        },
+
+        Message: {
+          include: {
+            User: {
+              select: {
+                id: true,
+                bio: true,
+                email: true,
+                image: true,
+                createdAt: true,
+                name: true,
+              },
+            },
+            MessageAttachments: {
+              include: {
+                Attachment: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    res.status(200).json({
+      status: true,
+      message: "Chat fetched successfully",
+      data: chat,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({
+      status: false,
+      message: "Internal server error",
+      data: null,
+    });
+  }
+};
+
 exports.createChat = async (req, res) => {
   const { id } = req.user; // adminId
 
-  const { name, isGroup, members } = req.body;
+  const { name, isGroup, members } = req.body; // userId will be valid only for private chats
   try {
-    const chat = await prisma.chat.create({
+    members.push(id);
+    const chat = await prisma.chat.findFirst({
+      where: {
+        name,
+        isGroup,
+        AND: members.map((memberId) => ({
+          Member: {
+            some: {
+              userId: memberId,
+            },
+          },
+        })),
+      },
+    });
+
+    if (chat) {
+      // call redis
+
+      return res.status(200).send({
+        status: true,
+        message: "Chat created successfully",
+        data: chat,
+      });
+    }
+
+    const newChat = await prisma.chat.create({
       data: {
         name: name || null,
         isGroup,
@@ -19,13 +106,16 @@ exports.createChat = async (req, res) => {
       },
     });
 
-    members.push(id);
-    await createMemberOfChat(members, chat.id);
+    await createMemberOfChat(members, newChat.id);
+
+    // call redis
+
+    await storeUserLastChat(id, newChat.id);
 
     res.status(201).send({
       status: true,
       message: "Chat created successfully",
-      data: chat,
+      data: newChat,
     });
   } catch (error) {
     console.error(error.message);

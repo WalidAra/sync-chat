@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import {
@@ -20,6 +21,7 @@ import { setProfile } from "../../features/state_management/slices/user.slice";
 import { Client } from "../../types";
 import { useNavigate } from "react-router-dom";
 import { Checkbox } from "@chakra-ui/react";
+import { useAuth } from "../../hooks/useAuth";
 
 const schema = z.object({
   email: z.string().email("Invalid email format"),
@@ -35,6 +37,7 @@ const Login: React.FC = () => {
   const [error, setError] = useState("");
   const router = useNavigate();
   const [isChecked, setIsChecked] = useState<boolean>(false);
+  const {setToken} = useAuth();
 
   const {
     handleSubmit,
@@ -73,9 +76,7 @@ const Login: React.FC = () => {
       if (response.status === true) {
         const { token, ...userData } = response.data;
         localStorage.setItem("sync-token", token);
-        dispatch(
-          setProfile({ isLoggedIn: response.status, user: userData as Client })
-        );
+        setToken(token);
         router("/");
       }
     } catch (err) {

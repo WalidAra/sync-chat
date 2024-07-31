@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/rules-of-hooks */
 
@@ -14,14 +15,15 @@ import { Card, CardBody, CardFooter } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { useFetch } from "../../hooks/useFetch";
+import { Client, Friend } from "../../types";
+import socket from "../../utils/socket";
 
 const FindFriends = () => {
   const { token } = useAuth();
-  const [users, setUsers] = useState<object[]>([]);
+  const [users, setUsers] = useState<(Client & Friend)[]>([]);
 
   useEffect(() => {
     const getData = async () => {
-
       const res = await useFetch({
         feature: "/user",
         method: "GET",
@@ -29,7 +31,9 @@ const FindFriends = () => {
         token,
       });
 
-      setUsers(res.data);
+      if (res.status === true) {
+        setUsers(res.data);
+      }
     };
 
     if (token) {
@@ -37,9 +41,21 @@ const FindFriends = () => {
     }
   }, [token]);
 
+  const sendFriendRequest = async (receiverId: string) => {
+    socket.emit("send-friend-request", {
+      receiverId,
+      token,
+    });
+
+    const userIndex = users.findIndex((user) => user.id === receiverId);
+    const newUsers = [...users];
+    newUsers.splice(userIndex, 1);
+    setUsers(newUsers);
+  };
+
   return (
     <Box w={"100%"} as="main" ml={"14"} overflow={"auto"} py={20}>
-      <Flex w={"70%"} m={"auto"} flexDir={"column"} >
+      <Flex w={{ sm: "95%", md: "80%" }} m={"auto"} flexDir={"column"}>
         <Heading>Find Friends</Heading>
 
         <Flex justifyContent={"space-between"} alignItems={"center"}>
@@ -62,7 +78,12 @@ const FindFriends = () => {
               </CardBody>
 
               <CardFooter>
-                <Button w={"full"} variant={"outline"} fontWeight={500}>
+                <Button
+                  onClick={() => sendFriendRequest(user.id)}
+                  w={"full"}
+                  variant={"outline"}
+                  fontWeight={500}
+                >
                   Send friend request
                 </Button>
               </CardFooter>

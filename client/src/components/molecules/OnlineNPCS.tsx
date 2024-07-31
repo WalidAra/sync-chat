@@ -1,25 +1,27 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Avatar, Box, Stack } from "@chakra-ui/react";
-import socket from "../../utils/socket";
+
+import { Avatar, Box, Stack, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../features/state_management/store/store";
+import { useAuth } from "../../hooks/useAuth";
+import socket from "../../utils/socket";
 
 const OnlineNPCS = () => {
-  const { id } = useSelector((state: RootState) => state.user).user;
-  const [onlineFriends, setOnlineFriends] = useState<object[]>([]);
+  const { token } = useAuth();
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     socket.on("online-friends", (data) => {
-      console.log('====================================');
-      console.log(data);
-      console.log('====================================');
-      setOnlineFriends(data);
+      setUsers(data);
     });
 
-    socket.emit("user-online", id);
-  }, [id]);
+    if (token) {
+      socket.emit("user-online", token);
+    }
+
+    return () => {
+      socket.off("online-friends");
+    };
+  }, [token]);
 
   return (
     <Box>
@@ -29,15 +31,14 @@ const OnlineNPCS = () => {
         py={2}
         borderBottomWidth={"1px"}
         overflow={"auto"}
+        h={"49px"}
       >
-        {onlineFriends.length > 0 ? (
-          onlineFriends.map((u: any) => {
-            return (
-              <Avatar name="Oshigaki Kisame" src="https://bit.ly/broken-link" />
-            );
-          })
+        {users.length > 0 ? (
+          users.map((user: any) => (
+            <Avatar size={"sm"} key={user.User.id} src={user.User.image} />
+          ))
         ) : (
-          <div>u have no friends loser</div>
+          <Text textAlign={"center"}>Its quite for now</Text>
         )}
       </Stack>
     </Box>

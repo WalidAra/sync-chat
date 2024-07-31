@@ -5,3 +5,4 @@ function generateRandomChars(length) {
 }
 
 module.exports = { generateRandomChars };
+

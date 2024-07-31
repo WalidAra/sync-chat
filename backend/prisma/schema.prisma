@@ -29,9 +29,24 @@ model User {
 
   Message    Message[]
   Chat       Chat[]
-  Friend  Friend[]
+  ClientFriend  Friend[] @relation("clientFriend")
+  UserFriend  Friend[]  @relation("userFriend")
   Member     Member[]
   Block Block[]
+  FriendRequest FriendRequest[]
+  sentFriendRequests FriendRequest[] @relation("SentFriendRequests")
+  receivedFriendRequests FriendRequest[] @relation("ReceivedFriendRequests")
+}
+
+model FriendRequest {
+  id        String @id @default(uuid())
+  createdAt DateTime @default(now())
+  senderId  String
+  receiverId String
+  sender    User   @relation("SentFriendRequests", fields: [senderId], references: [id])
+  receiver  User   @relation("ReceivedFriendRequests", fields: [receiverId], references: [id])
+  User User[]
+  @@unique([senderId, receiverId])
 }
 
 model Block {
@@ -54,7 +69,8 @@ model Friend {
   id       String @id @default(uuid())
   clientId String
   userId   String
-  User     User   @relation(fields: [clientId], references: [id])
+  Client   User   @relation("clientFriend",fields: [clientId], references: [id])
+  User     User   @relation("userFriend",fields: [userId], references: [id])
 
   @@unique([clientId, userId])
 }

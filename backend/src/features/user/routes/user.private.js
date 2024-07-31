@@ -8,7 +8,7 @@ const {
   deleteUser,
   update,
   getAllUsers,
-  getUserNotifications,
+  getUserFriendRequests,
   addFriend,
 } = require("../user.controller");
 const router = require("express").Router();
@@ -23,7 +23,7 @@ router.post("/lastChat", createUserLastChat);
 
 router.get("/users", getAllUsers);
 
-router.get("/notifications", getUserNotifications);
+router.get("/friend-requests", getUserFriendRequests);
 router.post("/add-friend", addFriend);
 
 module.exports = router;

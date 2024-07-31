@@ -3,10 +3,51 @@ const bcrypt = require("bcrypt");
 const { createFriend } = require("./models/friend.model");
 
 exports.getAllUsers = async (req, res) => {
-  const { id } = req.user;
+  const { id } = req.user; // Extract the current user's ID from the request
 
   try {
-    const users = await prisma.user.findMany({
+    // Fetch users who are not friends with the current user and have no pending friend requests
+    const nonFriendUsers = await prisma.user.findMany({
+      where: {
+        AND: [
+          {
+            // Ensure the user is not in any Friend list where the current user is involved
+            ClientFriend: {
+              none: {
+                userId: id, // Current user is not listed as a friend in ClientFriend
+              },
+            },
+          },
+          {
+            UserFriend: {
+              none: {
+                clientId: id, // Current user is not listed as a friend in UserFriend
+              },
+            },
+          },
+          {
+            // Ensure no sent friend requests to the current user
+            sentFriendRequests: {
+              none: {
+                receiverId: id, // Current user is not a receiver of any friend request
+              },
+            },
+          },
+          {
+            // Ensure no received friend requests from the current user
+            receivedFriendRequests: {
+              none: {
+                senderId: id, // Current user is not a sender of any friend request
+              },
+            },
+          },
+          {
+            id: {
+              not: id, // Exclude the current user from the list
+            },
+          },
+        ],
+      },
       select: {
         id: true,
         bio: true,
@@ -17,13 +58,15 @@ exports.getAllUsers = async (req, res) => {
       },
     });
 
+    // Send successful response with non-friend users data
     res.status(200).json({
       status: true,
-      message: "Users retrieved successfully",
-      data: users,
+      message: "Non-friend users retrieved successfully",
+      data: nonFriendUsers,
     });
   } catch (error) {
     console.error(error.message);
+    // Send error response for internal server error
     return res.status(500).json({
       status: false,
       message: "Internal Server Error",
@@ -31,6 +74,8 @@ exports.getAllUsers = async (req, res) => {
     });
   }
 };
+
+
 
 exports.profile = async (req, res) => {
   const { id } = req.user;
@@ -147,26 +192,31 @@ exports.deleteUser = async (req, res) => {
   }
 };
 
-exports.getUserNotifications = async (req, res) => {
-  const userId = req.user.id;
+exports.getUserFriendRequests = async (req, res) => {
+  const { id } = req.user;
 
   try {
-    const notifications = await prisma.message.findMany({
+    const result = await prisma.friendRequest.findMany({
       where: {
-        Chat: {
-          Member: {
-            some: { userId },
+        receiverId: id,
+      },
+      include: {
+        sender: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+            createdAt: true,
+            email: true,
           },
         },
-        NOT: { senderId: userId },
       },
-      orderBy: { createdAt: "desc" },
     });
 
     res.status(200).json({
       status: true,
-      message: "Notifications retrieved successfully",
-      data: notifications,
+      message: "Friend requests retrieved successfully",
+      data: result,
     });
   } catch (error) {
     console.error(error.message);

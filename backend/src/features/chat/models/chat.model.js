@@ -1,5 +1,4 @@
-const { redisHelper } = require("../../../../config/redisHelper");
-
+const { redisHelper } = require("../../../../helpers/redis.helper");
 
 const getUserLastChatModel = async (id) => {
   try {

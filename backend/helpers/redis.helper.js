@@ -39,11 +39,13 @@ class RedisHelper {
 
   async delete(key) {
     try {
-      return await redisClient.del(key);
+      await redisClient.del(key);
     } catch (error) {
-      console.error(error.message);
+      console.error("Delete Error:", error.message);
+      return null;
     }
   }
 }
 
-module.exports = RedisHelper;
+const redisHelper = new RedisHelper();
+module.exports = { redisHelper };

@@ -84,7 +84,7 @@ const SideBar = () => {
             icon={<IoMdSettings />}
           />
         </Link>
-        <Link to={'/notifications'} >
+        <Link to={'/friend-requests'} >
           <IconButton
             isRound={true}
             variant="ghost"

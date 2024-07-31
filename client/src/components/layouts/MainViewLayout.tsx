@@ -18,7 +18,7 @@ const MainViewLayout = ({
   props?: BoxProps;
 }) => {
   return (
-    <Flex w={"100%"} h={"100vh"} ml={"14"}>
+    <Flex as={'main'} w={"100%"} h={"100vh"} ml={"14"}>
       <ChatPanel />
 
       <Flex className="chat-bg" w={"100%"} flexDir={"column"}>

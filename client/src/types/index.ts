@@ -21,3 +21,23 @@ export type Fetch = {
   token?: string | null;
   feature: "/chat" | "/user" | "/auth";
 };
+
+export type Friend = {
+  id: string;
+  clientId: string;
+  userId: string;
+};
+
+export type FriendRequest = {
+  id: string;
+  senderId: string;
+  receiverId: string;
+  createdAt: string;
+  sender: {
+    id: string;
+    name: string;
+    image: string;
+    createdAt: string;
+    email: string;
+  };
+};

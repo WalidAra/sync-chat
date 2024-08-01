@@ -1,49 +1,62 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { Navigate, useLocation } from "react-router-dom";
 import { useFetch } from "../../hooks/useFetch";
-
-const config = {
-  matchers: ["/auth/login", "/auth/register" , "/"],
-};
+import { config } from "../../utils";
 
 const Middleware = ({ children }: { children: React.ReactNode }) => {
   const { token } = useAuth();
   const { pathname } = useLocation();
   const [lastChatId, setLastChatId] = useState<string | null>(null);
+  const [isValid, setIsValid] = useState<boolean>(false);
 
   useEffect(() => {
     const getLastChat = async () => {
-      const res = await useFetch({
-        feature: "/user",
-        method: "GET",
-        endPoint: "/lastChat",
-        token: token,
-      });
+      try {
+        const res = await useFetch({
+          feature: "/user",
+          method: "GET",
+          endPoint: "/lastChat",
+          token: token,
+        });
 
-      if (res.status === true) {
-        setLastChatId(res.data);
+        if (res.status === true) {
+          setLastChatId(res.data);
+        }
+      } catch (error: any) {
+        console.error(error.message);
+      } finally {
+        setIsValid(true);
       }
     };
 
     if (token) {
       getLastChat();
+    } else {
+      setIsValid(true); // Consider it valid even if not authenticated
     }
   }, [token]);
 
+  if (!isValid) {
+    return null; // Optionally, show a loader or something while validating
+  }
+
   if (!token) {
-    if (pathname !== "/auth/login" && pathname !== "/auth/register") {
+
+    if (!config.public.some((path) => pathname.startsWith(path))) {
       return <Navigate to="/auth/login" />;
     }
   } else {
-    if (config.matchers.includes(pathname) && lastChatId) {
-      return <Navigate to={`/chats/${lastChatId}`} />;
-    } else if (
-      (pathname.includes("chats") || config.matchers.includes(pathname)) &&
-      lastChatId === null
-    ) {
+
+    if (config.public.some((path) => pathname.startsWith(path)) && !lastChatId) {
       return <Navigate to="/" />;
+    } else if (
+      lastChatId &&
+      (pathname === "/" || config.public.includes(pathname))
+    ) {
+      return <Navigate to={`/chats/${lastChatId}`} />;
     }
   }
 

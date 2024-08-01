@@ -30,8 +30,7 @@ const MessageCheck = ({ isMyMsg, image, name, content, createdAt }: Props) => {
               {name}
             </Text>
             <Text ml={2} fontSize={"14px"}>
-              {" "}
-              {createdAt}{" "}
+              {createdAt}
             </Text>
           </Flex>
 

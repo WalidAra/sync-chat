@@ -20,38 +20,38 @@ import FriendRequest from "../pages/home/FriendRequest";
 const AppRouter = () => {
   return (
     <Router>
-      {/* <Middleware> */}
-        <ProfileProvider>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <HomeLayout>
-                  <Outlet />
-                </HomeLayout>
-              }
-            >
-              <Route index element={<FreshStart />} />
-              <Route path="chats/:chatId" element={<ConversationPanel />} />
-              <Route path="friend-requests" element={<FriendRequest />} />
-              <Route path="find-friends" element={<FindFriends />} />
-            </Route>
+      <Middleware>
+      <ProfileProvider>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <HomeLayout>
+                <Outlet />
+              </HomeLayout>
+            }
+          >
+            <Route index element={<FreshStart />} />
+            <Route path="chats/:chatId" element={<ConversationPanel />} />
+            <Route path="friend-requests" element={<FriendRequest />} />
+            <Route path="find-friends" element={<FindFriends />} />
+          </Route>
 
-            <Route
-              path="/auth"
-              element={
-                <AuthLayout>
-                  <Outlet />
-                </AuthLayout>
-              }
-            >
-              <Route path="login" element={<Login />} />
-              <Route path="register" element={<Register />} />
-            </Route>
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </ProfileProvider>
-      {/* </Middleware> */}
+          <Route
+            path="/auth"
+            element={
+              <AuthLayout>
+                <Outlet />
+              </AuthLayout>
+            }
+          >
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+          </Route>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </ProfileProvider>
+      </Middleware>
     </Router>
   );
 };

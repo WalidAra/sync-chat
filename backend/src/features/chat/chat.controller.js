@@ -90,7 +90,7 @@ exports.createChat = async (req, res) => {
 
     if (chat) {
       // call redis
-
+      await storeUserLastChat(id, chat.id);
       return res.status(200).send({
         status: true,
         message: "Chat created successfully",

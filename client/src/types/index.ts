@@ -75,4 +75,5 @@ export type Message = {
   chatId: string;
   type: "SIMPLE" | "COMPLEX";
   attachments: string[];
+  createdAt:string;
 };

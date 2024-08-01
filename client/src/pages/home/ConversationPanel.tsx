@@ -10,6 +10,7 @@ import { ChatInfo, FetchResponse, MessageInfo } from "../../types";
 import socket from "../../utils/socket";
 import { useSelector } from "react-redux";
 import { RootState } from "../../features/state_management/store/store";
+import { formatDateTime } from "../../utils";
 
 const ConversationPanel = () => {
   const { token } = useAuth();
@@ -31,6 +32,9 @@ const ConversationPanel = () => {
         const data = res.data as ChatInfo;
         setChat(data);
         setMessages(data.Message);
+        console.log('====================================');
+        console.log("messages", data.Message[0]);
+        console.log('====================================');
       }
     };
 
@@ -58,7 +62,7 @@ const ConversationPanel = () => {
         messages.map((msg) => (
           <MessageCard
             content={msg.content}
-            createdAt={"4:30AM"}
+            createdAt={formatDateTime(msg.createdAt)}
             image={msg.User.image || ""}
             name={msg.User.name}
             isMyMsg={msg.User.id === user.id}

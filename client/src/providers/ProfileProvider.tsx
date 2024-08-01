@@ -9,12 +9,14 @@ import { useFetch } from "../hooks/useFetch";
 import { useToast } from "@chakra-ui/react";
 import { setProfile } from "../features/state_management/slices/user.slice";
 import { Client } from "../types";
+import { useNavigate } from "react-router-dom";
 
 const ProfileProvider = ({ children }: { children: React.ReactNode }) => {
   const { token } = useAuth();
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user).user;
   const toast = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getUserProfile = async () => {
@@ -41,7 +43,7 @@ const ProfileProvider = ({ children }: { children: React.ReactNode }) => {
         });
 
         setTimeout(() => {
-          window.location.reload();
+          navigate("/auth/login");
         }, 2000);
       }
     };
@@ -49,7 +51,7 @@ const ProfileProvider = ({ children }: { children: React.ReactNode }) => {
     if (token && user.id === "") {
       getUserProfile();
     }
-  }, [dispatch, toast, token, user.id]);
+  }, [dispatch, navigate, toast, token, user.id]);
 
   return <>{children}</>;
 };

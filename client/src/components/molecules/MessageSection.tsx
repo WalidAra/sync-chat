@@ -9,7 +9,7 @@ type Props = {
 
 const MessageSection = ({ children, title }: Props) => {
   return (
-    <Flex mt={4} flexDir={"column"} gap={3} as="section">
+    <Flex mt={4} w={"100%"} flexDir={"column"} gap={3} as="section">
       <Text
         fontWeight={500}
         fontSize={"14px"}
@@ -21,8 +21,9 @@ const MessageSection = ({ children, title }: Props) => {
         {title}
       </Text>
       <Box w={"100%"} display={"flex"} flexDir={"column"}>
-        {children}
+        
 
+        {children}
       </Box>
     </Flex>
   );

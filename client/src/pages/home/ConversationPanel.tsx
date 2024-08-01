@@ -20,6 +20,24 @@ const ConversationPanel = () => {
   const [messages, setMessages] = useState<MessageInfo[]>([]);
 
   useEffect(() => {
+    const setData = async () => {
+      await useFetch({
+        feature: "/user",
+        method: "POST",
+        token,
+        endPoint: "/lastChat",
+        body: {
+          chatId: chatId,
+        },
+      });
+    };
+
+    if (token && chatId) {
+      setData();
+    }
+  }, [chatId, token]);
+
+  useEffect(() => {
     const getData = async () => {
       const res = await useFetch({
         feature: "/chat",
@@ -32,9 +50,6 @@ const ConversationPanel = () => {
         const data = res.data as ChatInfo;
         setChat(data);
         setMessages(data.Message);
-        console.log('====================================');
-        console.log("messages", data.Message[0]);
-        console.log('====================================');
       }
     };
 

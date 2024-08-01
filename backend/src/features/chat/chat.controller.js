@@ -127,7 +127,7 @@ exports.createChat = async (req, res) => {
   }
 };
 
-exports.getUSerChats = async (req, res) => {
+exports.getUserChats = async (req, res) => {
   const { id } = req.user;
 
   try {
@@ -141,25 +141,32 @@ exports.getUSerChats = async (req, res) => {
       },
 
       include: {
-        Member: {
-          where: {
-            userId: {
-              not: id,
-            },
+        Message: {
+          orderBy: {
+            createdAt:"desc"
           },
-          include: {
-            User: {
-              select: {
-                id: true,
-                bio: true,
-                email: true,
-                image: true,
-                createdAt: true,
-                name: true,
-              },
-            },
-          },
+          take: 1,
         },
+
+        Member:{
+          where:{
+            userId:{
+              not:id
+            }
+          },
+          include:{
+            User:{
+              select:{
+                id:true,
+                bio:true,
+                email:true,
+                image:true,
+                createdAt:true,
+                name:true
+              }
+            }
+          }
+        }
       },
     });
 

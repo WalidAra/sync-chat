@@ -1,5 +1,5 @@
 const {
-  getUSerChats,
+  getUserChats,
   getUserLastChat,
   createUserLastChat,
 } = require("../../chat/chat.controller");
@@ -16,7 +16,7 @@ const router = require("express").Router();
 router.get("/profile", profile);
 router.delete("/delete", deleteUser);
 router.put("/update", update);
-router.get("/chats", getUSerChats);
+router.get("/chats", getUserChats);
 
 router.get("/lastChat", getUserLastChat);
 router.post("/lastChat", createUserLastChat);

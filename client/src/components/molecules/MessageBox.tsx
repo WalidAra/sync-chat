@@ -1,50 +1,62 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Badge, Box, Text } from "@chakra-ui/react";
+import { Box, Button, Text } from "@chakra-ui/react";
 import UserShortCutCard from "../organisms/UserShortCutCard";
+import { Message } from "../../types";
+import { formatDateTime } from "../../utils";
+import { Link } from "react-router-dom";
 
 type Props = {
   isBordered?: boolean;
+  image: string;
+  name: string;
+  msg: Message;
+  chatId: string;
 };
 
-const MessageBox = ({ isBordered = false }: Props) => {
+const MessageBox = ({
+  isBordered = false,
+  image,
+  name,
+  msg,
+  chatId,
+}: Props) => {
   return (
-    <Box
-      display={"flex"}
-      alignItems={"center"}
-      justifyContent={"space-between"}
-      gap={3}
-      py={4}
-      borderBottomWidth={isBordered ? "1px" : "0px"}
-    >
-      <UserShortCutCard gap={0} isMsg name="InfoBrains">
-        <Text className="line-clamp-1" color={"text.100"} fontSize={"14px"}>
-          When we do the next event guys ?
-        </Text>
-      </UserShortCutCard>
-
-      <Box
-        h={"100%"}
-        display={"flex"}
-        flexDirection={"column"}
-        justifyContent={"space-between"}
+    <Link to={`/chats/${chatId}`} style={{ width: "100%", display: "block" }}>
+      <Button
+        w={"100%"}
+        display={"grid"}
+        gridTemplateColumns={"1fr auto"} // Define two columns, one flexible and one auto-sized
+        alignItems={"center"} // Center align items vertically
+        py={2}
+        borderBottomWidth={isBordered ? "1px" : "0px"}
+        height={"auto"}
+        variant={"ghost"}
+        fontWeight={400}
+        gap={2} // Adjust gap between items as needed
       >
-        <Badge
-          bg={"red"}
-          rounded={"full"}
+        <Box
           display={"flex"}
-          justifyContent={"center"}
           alignItems={"center"}
-          py={0.5}
-          color={"white"}
+          gridColumn={"1 / 2"} // Place this item in the first column
         >
-          4
-        </Badge>
+          <UserShortCutCard src={image} gap={0} isMsg name={name}>
+            <Text className="line-clamp-1" color={"text.100"} fontSize={"14px"}>
+              {msg.content}
+            </Text>
+          </UserShortCutCard>
+        </Box>
 
-        <Text color={"text.100"} fontSize={"14px"}>
-          12:52
-        </Text>
-      </Box>
-    </Box>
+        <Box
+          display={"grid"}
+          flexDirection={"column"}
+          justifyContent={"center"}
+          gridColumn={"2 / 3"} // Place this item in the second column
+        >
+          <Text color={"text.100"} fontSize={"14px"}>
+            {formatDateTime(msg.createdAt)}
+          </Text>
+        </Box>
+      </Button>
+    </Link>
   );
 };
 

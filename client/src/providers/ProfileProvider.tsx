@@ -12,7 +12,7 @@ import { Client } from "../types";
 import { useNavigate } from "react-router-dom";
 
 const ProfileProvider = ({ children }: { children: React.ReactNode }) => {
-  const { token } = useAuth();
+  const { token, setToken } = useAuth();
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user).user;
   const toast = useToast();
@@ -27,8 +27,13 @@ const ProfileProvider = ({ children }: { children: React.ReactNode }) => {
         token,
       });
 
-      if (response.status) {      
-        dispatch(setProfile({isLoggedIn:response.status, user:response.data as Client}));
+      if (response.status) {
+        dispatch(
+          setProfile({
+            isLoggedIn: response.status,
+            user: response.data as Client,
+          })
+        );
       } else if (
         response.status === false &&
         response.data.isExpired === true
@@ -43,6 +48,7 @@ const ProfileProvider = ({ children }: { children: React.ReactNode }) => {
         });
 
         setTimeout(() => {
+          setToken(null);
           navigate("/auth/login");
         }, 2000);
       }
@@ -51,7 +57,7 @@ const ProfileProvider = ({ children }: { children: React.ReactNode }) => {
     if (token && user.id === "") {
       getUserProfile();
     }
-  }, [dispatch, navigate, toast, token, user.id]);
+  }, [dispatch, navigate, setToken, toast, token, user.id]);
 
   return <>{children}</>;
 };

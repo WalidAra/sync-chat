@@ -16,14 +16,20 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { useFetch } from "../../hooks/useFetch";
+import { Chat, Member, Message } from "../../types";
+
+type ChatsResponseProps = Chat & {
+  Message: Message[];
+  Member: Member[];
+};
 
 const ChatsContainer = () => {
   //   const [searchValue, setSearchValue] = useState<false>(false);
-  const [userMessages, setUserMessages] = useState<object[]>([]);
+  const [chats, setChats] = useState<ChatsResponseProps[]>([]);
   const { token } = useAuth();
 
   useEffect(() => {
-    const getUserMessages = async () => {
+    const getChats = async () => {
       const res = await useFetch({
         feature: "/user",
         method: "GET",
@@ -31,13 +37,18 @@ const ChatsContainer = () => {
         token,
       });
 
+      console.log("====================================");
+      console.log(res);
+      console.log("====================================");
+
       if (res.status === true) {
-        setUserMessages(res.data);
+        const data = res.data as ChatsResponseProps[];
+        setChats(data);
       }
     };
 
     if (token) {
-      getUserMessages();
+      getChats();
     }
   }, [token]);
 
@@ -73,11 +84,36 @@ const ChatsContainer = () => {
           </>
         }
       >
-        <MessageBox />
+        {chats.map((chat) => {
+          if (chat.isGroup) {
+            return (
+              <MessageBox
+                key={chat.id}
+                chatId={chat.id}
+                msg={chat.Message[0]}
+                image={chat.image || ""}
+                name={chat.name as string}
+              />
+            );
+          }
+        })}
       </MessageSection>
 
       <MessageSection title="ALL MESSAGES">
-        <MessageBox isBordered />
+        {chats.map((chat) => {
+          if (!chat.isGroup) {
+            return (
+              <MessageBox
+                key={chat.id}
+                chatId={chat.id}
+                msg={chat.Message[0]}
+                image={chat.Member[0].User.image || ""}
+                name={chat.Member[0].User.name}
+                isBordered
+              />
+            );
+          }
+        })}
       </MessageSection>
     </Box>
   );

@@ -7,6 +7,7 @@ import { useFetch } from "../../hooks/useFetch";
 import { config } from "../../utils";
 
 const Middleware = ({ children }: { children: React.ReactNode }) => {
+  
   const { token } = useAuth();
   const { pathname } = useLocation();
   const [lastChatId, setLastChatId] = useState<string | null>(null);
@@ -35,12 +36,12 @@ const Middleware = ({ children }: { children: React.ReactNode }) => {
     if (token) {
       getLastChat();
     } else {
-      setIsValid(true); // Consider it valid even if not authenticated
+      setIsValid(true); 
     }
   }, [token]);
 
   if (!isValid) {
-    return null; // Optionally, show a loader or something while validating
+    return null; 
   }
 
   if (!token) {

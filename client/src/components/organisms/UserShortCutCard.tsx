@@ -21,7 +21,7 @@ const UserShortCutCard = ({
         {isMsg && <AvatarBadge boxSize="1em" bg="green.500" />}
       </Avatar>
 
-      <Flex gap={gap} flexDir={"column"}>
+      <Flex gap={gap} alignItems={'start'} flexDir={"column"}>
         <Text as={"h2"} fontWeight={"600"}>
           {name}
         </Text>

@@ -37,13 +37,9 @@ const OnlineNPCS = () => {
       token,
     });
 
-    console.log('====================================');
-    console.log(res);
-    console.log('====================================');
-
-    // if (res.status === true) {
-    //   navigate(`/chats/${res.data.id}`);
-    // }
+    if (res.status === true) {
+      navigate(`/chats/${res.data.id}`);
+    }
   };
 
   return (
@@ -59,6 +55,7 @@ const OnlineNPCS = () => {
         {users.length > 0 ? (
           users.map((user: any) => (
             <Avatar
+              name={user.User.name}
               onClick={() => jumpToChat(user.User.id)}
               cursor={"pointer"}
               size={"sm"}

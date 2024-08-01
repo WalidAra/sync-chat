@@ -72,21 +72,6 @@ const acceptFriendRequest = async (socket, io) => {
         const res = await removeFriendRequest(senderId, receiverId);
 
         if (obj && obj.count === 2 && res) {
-          const activeClientsKeys = await redisHelper.keys("AC_*");
-          const activeClients = await Promise.all(
-            activeClientsKeys.map(async (key) => {
-              const obj = {};
-              obj.value = await redisHelper.get(key);
-              obj.key = key.split("_")[1];
-              return obj;
-            })
-          );
-
-          const targets = activeClients.filter((obj) => {
-            return obj.key === senderId || obj.key === receiverId;
-          });
-
-          console.log(targets);
           await getUserOnlineFriends(socket, senderId, io);
           await getUserOnlineFriends(socket, receiverId, io);
         }
@@ -167,6 +152,18 @@ const sendMessageToChat = (socket, io) => {
   );
 };
 
+const requestUserStatus = async (socket, io) => {
+  return socket.on("request-user-status", async (id) => {
+    const activeClientsKeys = await redisHelper.keys("AC_*");
+
+    const found = activeClientsKeys.find((userId) => {
+      return userId.split("_")[1] === id;
+    });
+
+    socket.emit("response-user-status", found ? true : false);
+  });
+};
+
 module.exports = {
   markUserActivation,
   markUserDisconnect,
@@ -174,4 +171,5 @@ module.exports = {
   sendFriendRequest,
   acceptFriendRequest,
   sendMessageToChat,
+  requestUserStatus,
 };

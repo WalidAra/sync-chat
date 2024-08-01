@@ -39,21 +39,19 @@ const MainViewLayout = ({
     };
 
     return (
-      <Flex as={"main"} w={"100%"} h={"100vh"} ml={"14"}>
-        <ChatPanel />
-        <Flex className="chat-bg" w={"100%"} flexDir={"column"}>
-          <MainView {...props} overflow={"auto"} position={"relative"}>
-            <NavBar
-              name={chat.isGroup ? (chat.name as string) : getName()}
-              image={
-                chat.isGroup ? (chat.image as string) : (getImage() as string)
-              }
-            />
-            {children}
-          </MainView>
+      <Flex className="chat-bg" w={"100%"} flexDir={"column"}>
+        <MainView {...props} overflow={"auto"} position={"relative"}>
+          <NavBar
+            userId={chat.isGroup ? null : chat.Member[0].User.id}
+            name={chat.isGroup ? (chat.name as string) : getName()}
+            image={
+              chat.isGroup ? (chat.image as string) : (getImage() as string)
+            }
+          />
+          {children}
+        </MainView>
 
-          <MessageInputBox chatId={chat.id} />
-        </Flex>
+        <MessageInputBox chatId={chat.id} />
       </Flex>
     );
   }

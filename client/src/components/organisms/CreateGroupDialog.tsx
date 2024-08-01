@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -16,16 +18,46 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  Box,
   Stack,
   Avatar,
-  Heading,
 } from "@chakra-ui/react";
 import { LuPenSquare, LuSearch } from "react-icons/lu";
+import { Client, Friend } from "../../types";
+import { useAuth } from "../../hooks/useAuth";
+import { useFetch } from "../../hooks/useFetch";
+import SelectMembers from "./create group dialog/SelectMembers";
+import { motion } from "framer-motion";
 
 const CreateGroupDialog = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef<any>();
+  const { token } = useAuth();
+  const [friends, setFriends] = useState<(Friend & { User: Client })[]>([]);
+  const [selected, setSelected] = useState<(Friend & { User: Client })[]>([]);
+  const [page, setPage] = useState<number>(0);
+
+  useEffect(() => {
+    const getData = async () => {
+      const res = await useFetch({
+        feature: "/user",
+        method: "GET",
+        endPoint: "/friends",
+        token: token,
+      });
+
+      if (res.status) {
+        setFriends(
+          res.data as (Friend & {
+            User: Client;
+          })[]
+        );
+      }
+    };
+
+    if (token) {
+      getData();
+    }
+  }, [token]);
   return (
     <>
       <IconButton
@@ -65,26 +97,27 @@ const CreateGroupDialog = () => {
                 <InputLeftElement pointerEvents="none">
                   <LuSearch color="gray.300" />
                 </InputLeftElement>
-                <Input type="tel" placeholder="Phone number" />
+                <Input type="tel" placeholder="Search by username" />
               </InputGroup>
             </AlertDialogHeader>
             <AlertDialogCloseButton />
 
-            <AlertDialogBody>
-              <Box height={"260px"} overflow={"auto"}>
-                <Flex mb={3} flex="1" gap="4" alignItems="center">
-                  <Avatar
-                    name="Segun Adebayo"
-                    src="https://bit.ly/sage-adebayo"
-                    size={"sm"}
-                  />
-
-                  <Box>
-                    <Heading size="sm">Segun Adebayo</Heading>
-                    <Text>Creator, Chakra UI</Text>
-                  </Box>
-                </Flex>
-              </Box>
+            <AlertDialogBody overflow={"hidden"}>
+              <motion.div
+                transition={{
+                  type: "keyframes",
+                  duration: 0.6,
+                  ease: "easeInOut",
+                }}
+                animate={{ translateX: `-${page * 100}%` }}
+                className="w-full flex"
+              >
+                <SelectMembers
+                  friends={friends}
+                  setFriends={setFriends}
+                  setSelected={setSelected}
+                />
+              </motion.div>
             </AlertDialogBody>
 
             <AlertDialogFooter
@@ -99,20 +132,40 @@ const CreateGroupDialog = () => {
                 w={"70%"}
                 overflow={"auto"}
               >
-                <Avatar
-                  size={"sm"}
-                  name="Oshigaki Kisame"
-                  src="https://bit.ly/broken-link"
-                />
-                <Avatar
-                  size={"sm"}
-                  name="Sasuke Uchiha"
-                  src="https://bit.ly/broken-link"
-                />
-                <Avatar size={"sm"} src="https://bit.ly/broken-link" />
+                {selected.map((u, index) => (
+                  <Avatar
+                    onClick={() => {
+                      setSelected((prev) => {
+                        const newArr = [...prev];
+                        newArr.splice(index, 1);
+                        return newArr;
+                      });
+                      setFriends((prev) => [...prev, u]);
+                    }}
+                    size={"sm"}
+                    name={u.User.name}
+                    src={u.User.image || ""}
+                  />
+                ))}
               </Stack>
 
-              <Button colorScheme="blue" bg={"primary.100"} ml={3}>
+              <Button
+                onClick={async () => {
+                  // const res = await useFetch({
+                  //   feature: "/chat",
+                  //   method: "POST",
+                  //   endPoint: "/create-or-join",
+                  //   token: token,
+                  // });
+
+                  // onClose();
+
+                  setPage(2);
+                }}
+                colorScheme="blue"
+                bg={"primary.100"}
+                ml={3}
+              >
                 Continue
               </Button>
             </AlertDialogFooter>

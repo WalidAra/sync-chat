@@ -7,6 +7,7 @@ import { Flex } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../features/state_management/store/store";
 import socket from "../../utils/socket";
+import ChatPanel from "../templates/ChatPanel";
 
 const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   const { isLoggedIn, user } = useSelector((state: RootState) => state.user);
@@ -26,13 +27,15 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
     return () => {
       socket.off("connect");
     };
-    
   }, [isLoggedIn]);
 
   return (
     <Flex bg={"Background.100"} w={"100%"} height={"100vh"}>
       <SideBar />
-      {children}
+      <Flex as={"main"} w={"100%"} h={"100vh"} ml={"14"}>
+        <ChatPanel />
+        {children}
+      </Flex>
     </Flex>
   );
 };

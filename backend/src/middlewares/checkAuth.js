@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 
 const checkAuth = async (req, res, next) => {
   const token = req.headers["sync-token"];
-  
+
   if (!token) {
     return res.status(201).json({
       status: false,

@@ -16,7 +16,7 @@ const MessageCheck = ({ isMyMsg, image, name, content, createdAt }: Props) => {
   if (!isMyMsg) {
     return (
       <Flex gap={4}>
-        <Avatar src={image} />
+        <Avatar name={name} src={image} />
 
         <Box
           display={"inline-flex"}
@@ -41,7 +41,9 @@ const MessageCheck = ({ isMyMsg, image, name, content, createdAt }: Props) => {
             px={4}
             borderRadius={"0 16px 16px 16px"}
             bg={"white"}
-            boxShadow={"0 25px 50px -12px rgba(196, 172, 169, 0.25)"}
+            boxShadow={
+              " rgba(50, 50, 93, 0.02) 0px 13px 27px -5px, rgba(0, 0, 0, 0.2) 0px 8px 16px -8px;"
+            }
           >
             <Text color={"gray.600"}>{content}</Text>
           </Box>
@@ -64,7 +66,9 @@ const MessageCheck = ({ isMyMsg, image, name, content, createdAt }: Props) => {
           borderRadius={"16px 0px 16px 16px"}
           bg={"primary.100"}
           color={"white"}
-          boxShadow={"0 25px 50px -12px rgba(196, 172, 169, 0.25)"}
+          boxShadow={
+            " rgba(50, 50, 93, 0.02) 0px 13px 27px -5px, rgba(0, 0, 0, 0.2) 0px 8px 16px -8px;"
+          }
           ml={"auto"}
         >
           <Text color={"gray.50"}>{content}</Text>

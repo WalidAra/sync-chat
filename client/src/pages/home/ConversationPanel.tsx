@@ -60,8 +60,9 @@ const ConversationPanel = () => {
 
   useEffect(() => {
     socket.on("chat-messages", (data: FetchResponse) => {
+      const newMsg = { ...data.data, isNew: true };
       if (data.status) {
-        setMessages((prev) => [...prev, data.data]);
+        setMessages((prev) => [...prev, newMsg]);
       }
     });
 
@@ -76,6 +77,7 @@ const ConversationPanel = () => {
         user.id &&
         messages.map((msg) => (
           <MessageCard
+            isNew={msg?.isNew}
             content={msg.content}
             createdAt={formatDateTime(msg.createdAt)}
             image={msg.User.image || ""}

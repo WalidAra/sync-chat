@@ -5,13 +5,37 @@ import { LuPhone, LuSearch } from "react-icons/lu";
 import { PiDotsThreeOutlineVerticalLight } from "react-icons/pi";
 import ToggleDrawer from "../atoms/ToggleDrawer";
 import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import socket from "../../utils/socket";
 
 type Props = {
   name: string;
   image: string;
+  userId: string | null;
 };
 
-const NavBar = ({ name, image }: Props) => {
+const NavBar = ({ name, image, userId }: Props) => {
+  const [isOnline, setIsOnline] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (userId) {
+      socket.emit("request-user-status", userId);
+    }
+
+    socket.on("request-user-status", (data) => {
+      console.log(data);
+    });
+
+    return () => {
+      socket.off("response-user-status", (isOn) => {
+        console.log('====================================');
+        console.log(isOn);
+        console.log('====================================');
+        setIsOnline(isOn);
+      });
+    };
+  }, []);
+
   return (
     <Box
       as="header"
@@ -31,7 +55,31 @@ const NavBar = ({ name, image }: Props) => {
     >
       <UserShortCutCard src={image || ""} name={name}>
         <Text color={"text.100"} fontSize={"14px"}>
-          Online
+          {!isOnline ? (
+            <Flex alignItems={"center"} gap={2}>
+              <Box
+                w={2}
+                h={2}
+                className="online-status"
+                flexShrink={"0"}
+                rounded={"full"}
+                bg={"green.500"}
+                
+              ></Box>
+              Online
+            </Flex>
+          ) : (
+            <Flex alignItems={"center"} gap={1}>
+              <Box
+                w={2}
+                h={2}
+                flexShrink={"0"}
+                rounded={"full"}
+                bg={"gray.400"}
+              ></Box>
+              Offline
+            </Flex>
+          )}
         </Text>
       </UserShortCutCard>
 

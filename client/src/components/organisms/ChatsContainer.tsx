@@ -37,9 +37,6 @@ const ChatsContainer = () => {
         token,
       });
 
-      console.log("====================================");
-      console.log(res);
-      console.log("====================================");
 
       if (res.status === true) {
         const data = res.data as ChatsResponseProps[];

@@ -7,6 +7,7 @@ const {
   sendFriendRequest,
   acceptFriendRequest,
   sendMessageToChat,
+  requestUserStatus,
 } = require("../src/middlewares/socketValidator");
 
 const socketInitializer = (httpServer) => {
@@ -24,6 +25,7 @@ const socketInitializer = (httpServer) => {
     markUserDisconnect(socket);
     acceptFriendRequest(socket, io);
     sendMessageToChat(socket, io);
+    requestUserStatus(socket, io);
   });
 };
 

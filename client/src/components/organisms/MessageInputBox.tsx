@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Box, Flex, Input, IconButton, Button } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Input,
+  IconButton,
+  Button,
+  FormControl,
+} from "@chakra-ui/react";
 import { HiOutlineEmojiHappy } from "react-icons/hi";
 import { LuLink, LuMic } from "react-icons/lu";
 import MessageBoxAvatar from "../utils/MessageBoxAvatar";
@@ -17,7 +24,8 @@ const MessageInputBox = ({ chatId }: Props) => {
   const [attachments, setAttachments] = useState<string[]>([]);
   const { token } = useAuth();
 
-  const sendMessage = async () => {
+  const sendMessage = async (e: React.FormEvent<HTMLDivElement>) => {
+    e.preventDefault();
     if (token && msg) {
       socket.emit("message", {
         content: msg,
@@ -39,7 +47,9 @@ const MessageInputBox = ({ chatId }: Props) => {
       position={"relative"}
       bg={"transparent"}
     >
-      <Flex
+      <FormControl
+        as="form"
+        onSubmit={(e) => sendMessage(e)}
         gap={2}
         flexDir={"column"}
         w={"100%"}
@@ -114,7 +124,7 @@ const MessageInputBox = ({ chatId }: Props) => {
           </Flex>
 
           <Button
-            onClick={sendMessage}
+            type="submit"
             size={"sm"}
             bg={"primary.100"}
             color={"white"}
@@ -125,7 +135,7 @@ const MessageInputBox = ({ chatId }: Props) => {
             Send
           </Button>
         </Flex>
-      </Flex>
+      </FormControl>
     </Box>
   );
 };

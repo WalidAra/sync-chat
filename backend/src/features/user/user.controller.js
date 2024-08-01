@@ -1,6 +1,27 @@
 const prisma = require("../../../config/prisma");
 const bcrypt = require("bcrypt");
-const { createFriend } = require("./models/friend.model");
+const { createFriend, getUserFriends } = require("./models/friend.model");
+
+exports.getUserFriends = async (req, res) => {
+  const { id } = req.user;
+
+  try {
+    const friends = await getUserFriends(id);
+
+    res.status(200).json({
+      status: true,
+      message: "Friends retrieved successfully",
+      data: friends,
+    });
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({
+      status: false,
+      message: "Internal Server Error",
+      data: null,
+    });
+  }
+};
 
 exports.getAllUsers = async (req, res) => {
   const { id } = req.user; // Extract the current user's ID from the request
@@ -74,8 +95,6 @@ exports.getAllUsers = async (req, res) => {
     });
   }
 };
-
-
 
 exports.profile = async (req, res) => {
   const { id } = req.user;

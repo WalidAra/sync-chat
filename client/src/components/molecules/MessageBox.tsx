@@ -1,5 +1,4 @@
-import { Box, Button, Text } from "@chakra-ui/react";
-import UserShortCutCard from "../organisms/UserShortCutCard";
+import { Avatar, Box, Button, Flex, Grid, Text } from "@chakra-ui/react";
 import { Message } from "../../types";
 import { formatDateTime } from "../../utils";
 import { Link } from "react-router-dom";
@@ -25,36 +24,57 @@ const MessageBox = ({
         w={"100%"}
         display={"grid"}
         gridTemplateColumns={"1fr auto"} // Define two columns, one flexible and one auto-sized
-        alignItems={"center"} // Center align items vertically
+        alignItems={"end"} // Center align items vertically
         py={2}
         borderBottomWidth={isBordered ? "1px" : "0px"}
         height={"auto"}
         variant={"ghost"}
         fontWeight={400}
         gap={2} // Adjust gap between items as needed
+        rounded={0}
       >
-        <Box
-          display={"flex"}
-          alignItems={"center"}
-          gridColumn={"1 / 2"} // Place this item in the first column
-        >
-          <UserShortCutCard src={image} gap={0} isMsg name={name}>
-            <Text className="line-clamp-1" color={"text.100"} fontSize={"14px"}>
-              {msg.content}
-            </Text>
-          </UserShortCutCard>
-        </Box>
+        <Flex alignItems={"center"} gap={2}>
+          <Avatar src={image} name={name}  />
 
-        <Box
-          display={"grid"}
-          flexDirection={"column"}
-          justifyContent={"center"}
-          gridColumn={"2 / 3"} // Place this item in the second column
-        >
-          <Text color={"text.100"} fontSize={"14px"}>
+          <Grid
+            justifyItems={"start"}
+            flexDir={"column"}
+            w={"100%"}
+            flex={"1 1 0%"}
+            gap={1}
+          >
+            <Text as={"h2"} fontWeight={"600"}>
+              {name}
+            </Text>
+
+            <Box
+              w={"100%"}
+              sx={{
+                overflow: "hidden",
+                display: "-webkit-box",
+                WebkitBoxOrient: "vertical",
+                WebkitLineClamp: 1,
+              }}
+            >
+              <Text
+                w={"100%"}
+                fontSize={"sm"}
+                color={"gray.500"}
+                textAlign={"start"}
+              >
+                {msg.content}
+              </Text>
+            </Box>
+          </Grid>
+        </Flex>
+
+        <Flex flexDir={"column"} justifyContent={"space-between"} h={"100%"}>
+          <div></div>
+
+          <Text color={"gray.600"} fontSize={12} fontWeight={400}>
             {formatDateTime(msg.createdAt)}
           </Text>
-        </Box>
+        </Flex>
       </Button>
     </Link>
   );

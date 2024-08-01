@@ -67,6 +67,7 @@ export type ChatInfo = Chat & {
 export type MessageInfo = Message & {
   User: Client;
   MessageAttachments: string[];
+  isNew?: boolean;
 };
 
 export type Message = {
@@ -77,4 +78,3 @@ export type Message = {
   attachments: string[];
   createdAt:string;
 };
-

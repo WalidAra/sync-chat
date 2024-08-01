@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 
 type Props = {
   token: string | null;

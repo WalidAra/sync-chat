@@ -3,8 +3,9 @@ const jwt = require("jsonwebtoken");
 
 // ! CHAT ID IS THE ROOM NAME
 // ** AC_ is for the activated users
-// ** CR is for the created rooms
 // ** LM is for last message
+
+// ! user:[] array of the friends of user who is online
 
 const {
   createFriendRequest,

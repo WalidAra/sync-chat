@@ -5,7 +5,6 @@ const getUserOnlineFriends = async (socket, userId , io) => {
   const friends = await getUserFriends(userId);
   if (friends) {
     const activeClientsKeys = await redisHelper.keys("AC_*");
-
     const onlineFriends = friends.filter((friend) => {
       return activeClientsKeys.includes(`AC_${friend.User.id}`);
     });

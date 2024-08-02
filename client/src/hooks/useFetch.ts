@@ -14,9 +14,13 @@ export const useFetch = async ({
   const header = import.meta.env.VITE_TOKEN_HEADER as string;
   const BASE_URL = import.meta.env.VITE_BASE_URL as string;
 
-  const url = `${BASE_URL}${feature}${
+  const url = `${BASE_URL}api${feature}${
     token ? "/private" : "/public"
   }${endPoint}`;
+
+  console.log('====================================');
+  console.log(url);
+  console.log('====================================');
 
   try {
     const axiosConfig: AxiosRequestConfig = {

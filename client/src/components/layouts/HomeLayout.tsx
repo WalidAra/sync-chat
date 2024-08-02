@@ -15,14 +15,13 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     socket.on("connect", () => {
       console.log("Socket connected");
+      if (isLoggedIn) {
+        socket.emit("user-activated", {
+          id: user.id,
+          connectedAt: new Date(Date.now()),
+        });
+      }
     });
-
-    if (isLoggedIn) {
-      socket.emit("user-activated", {
-        id: user.id,
-        connectedAt: new Date(Date.now()),
-      });
-    }
 
     return () => {
       socket.off("connect");

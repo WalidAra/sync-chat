@@ -2,7 +2,6 @@
 import { BoxProps, Flex } from "@chakra-ui/react";
 import React from "react";
 import NavBar from "../templates/NavBar";
-import ChatPanel from "../templates/ChatPanel";
 import MainView from "../atoms/MainView";
 import MessageInputBox from "../organisms/MessageInputBox";
 

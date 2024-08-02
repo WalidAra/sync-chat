@@ -6,9 +6,11 @@ import ThemeToggler from "../molecules/ThemeToggler";
 import Logo from "../atoms/Logo";
 import LogOutIconButton from "../molecules/LogOutIconButton";
 import { GoBellFill } from "react-icons/go";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const SideBar = () => {
+  const { pathname } = useLocation();
+
   return (
     <Box
       as="aside"
@@ -37,24 +39,46 @@ const SideBar = () => {
           display={"flex"}
         >
           <Link to={"/"}>
-            <IconButton
-              isRound={true}
-              variant="ghost"
-              colorScheme="blackAlpha"
-              aria-label="Done"
-              fontSize="20px"
-              icon={<IoChatbubbles />}
-            />
+            <Box
+              w={"100%"}
+              className={
+                pathname === "/" || pathname.includes("/chats")
+                  ? "active-tab"
+                  : ""
+              }
+              bg={
+                pathname === "/" || pathname.includes("/chats")
+                  ? "blue.100"
+                  : "transparent"
+              }
+              rounded={"sm"}
+            >
+              <IconButton
+                isRound={true}
+                variant="ghost"
+                colorScheme="blackAlpha"
+                aria-label="Done"
+                fontSize="20px"
+                icon={<IoChatbubbles />}
+              />
+            </Box>
           </Link>
           <Link to={"/find-friends"}>
-            <IconButton
-              isRound={true}
-              variant="ghost"
-              colorScheme="blackAlpha"
-              aria-label="Done"
-              fontSize="20px"
-              icon={<FaUserFriends />}
-            />
+            <Box
+              w={"100%"}
+              className={pathname === "/find-friends" ? "active-tab" : ""}
+              bg={pathname === "/find-friends" ? "blue.100" : "transparent"}
+              rounded={"sm"}
+            >
+              <IconButton
+                isRound={true}
+                variant="ghost"
+                colorScheme="blackAlpha"
+                aria-label="Done"
+                fontSize="20px"
+                icon={<FaUserFriends />}
+              />
+            </Box>
           </Link>
         </Box>
 
@@ -75,24 +99,38 @@ const SideBar = () => {
         </Box>
 
         <Link to={"/settings"}>
-          <IconButton
-            isRound={true}
-            variant="ghost"
-            colorScheme="blackAlpha"
-            aria-label="Done"
-            fontSize="20px"
-            icon={<IoMdSettings />}
-          />
+          <Box
+            w={"100%"}
+            className={pathname === "/settings" ? "active-tab" : ""}
+            bg={pathname === "/settings" ? "blue.100" : "transparent"}
+            rounded={"sm"}
+          >
+            <IconButton
+              isRound={true}
+              variant="ghost"
+              colorScheme="blackAlpha"
+              aria-label="Done"
+              fontSize="20px"
+              icon={<IoMdSettings />}
+            />
+          </Box>
         </Link>
-        <Link to={'/friend-requests'} >
-          <IconButton
-            isRound={true}
-            variant="ghost"
-            colorScheme="blackAlpha"
-            aria-label="Done"
-            fontSize="20px"
-            icon={<GoBellFill />}
-          />
+        <Link to={"/friend-requests"}>
+          <Box
+            w={"100%"}
+            className={pathname === "/friend-requests" ? "active-tab" : ""}
+            bg={pathname === "/friend-requests" ? "blue.100" : "transparent"}
+            rounded={"sm"}
+          >
+            <IconButton
+              isRound={true}
+              variant="ghost"
+              colorScheme="blackAlpha"
+              aria-label="Done"
+              fontSize="20px"
+              icon={<GoBellFill />}
+            />
+          </Box>
         </Link>
         <LogOutIconButton />
       </Flex>

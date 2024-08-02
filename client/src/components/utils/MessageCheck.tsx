@@ -56,7 +56,7 @@ const MessageCheck = ({ isMyMsg, image, name, content, createdAt }: Props) => {
         <Flex gap={2} justifyContent={"flex-end"} alignItems={"center"}>
           <Text fontSize={"14px"}>YOU</Text>
           <Text fontSize={"14px"}>{createdAt}</Text>
-          <Avatar src={user.image || ""} size={"sm"} />
+          <Avatar src={user.image || ""} size={"xs"} />
         </Flex>
 
         <Box

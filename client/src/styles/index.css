@@ -345,3 +345,19 @@
     opacity: 0;
   }
 }
+
+.active-tab {
+  position: relative;
+}
+
+.active-tab::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 5px;
+  background-color: #2596c0;
+  transform: translateX(-50%);
+  border-radius: 1px;
+}

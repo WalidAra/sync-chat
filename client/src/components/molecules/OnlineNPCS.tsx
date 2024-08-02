@@ -16,7 +16,9 @@ const OnlineNPCS = () => {
 
   useEffect(() => {
     socket.on("online-friends", (data) => {
-      setUsers(data);
+      if (data.length > 0) {
+        setUsers(data);
+      }
     });
 
     if (token) {
@@ -25,6 +27,7 @@ const OnlineNPCS = () => {
 
     return () => {
       socket.off("online-friends");
+      socket.off("user-online");
     };
   }, [token]);
 

@@ -45,6 +45,28 @@ class RedisHelper {
       return null;
     }
   }
+
+  async pushInList(key, value) {
+    try {
+      await redisClient.lPush(key, value);
+    } catch (error) {
+      console.error("Push Error:", error.message);
+      return null;
+    }
+  }
+
+  async popFromList(key) {
+    try {
+      return await redisClient.rPop(key);
+    } catch (error) {
+      console.error("Pop Error:", error.message);
+      return null;
+    }
+  }
+
+  async getList(key){
+    return await redisClient.lRange(key, 0, -1);
+  }
 }
 
 const redisHelper = new RedisHelper();

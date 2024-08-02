@@ -24,14 +24,13 @@ const NavBar = ({ name, image, userId , chat }: Props) => {
       socket.emit("request-user-status", userId);
     }
 
-    socket.on("request-user-status", (data) => {
-      console.log(data);
+    socket.on("response-user-status", (data) => {
+      setIsOnline(data);
     });
 
     return () => {
-      socket.off("response-user-status", (isOn) => {
-        setIsOnline(isOn);
-      });
+      socket.off("request-user-status");
+      socket.off("response-user-status");
     };
   }, [userId]);
 
@@ -54,7 +53,7 @@ const NavBar = ({ name, image, userId , chat }: Props) => {
     >
       <UserShortCutCard src={image || ""} name={name}>
         <Text color={"text.100"} fontSize={"14px"}>
-          {!isOnline ? (
+          {isOnline ? (
             <Flex alignItems={"center"} gap={2}>
               <Box
                 w={2}

@@ -7,14 +7,16 @@ import ToggleDrawer from "../atoms/ToggleDrawer";
 import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import socket from "../../utils/socket";
+import { ChatInfo } from "../../types";
 
 type Props = {
   name: string;
   image: string;
   userId: string | null;
+  chat: ChatInfo;
 };
 
-const NavBar = ({ name, image, userId }: Props) => {
+const NavBar = ({ name, image, userId , chat }: Props) => {
   const [isOnline, setIsOnline] = useState<boolean>(false);
 
   useEffect(() => {
@@ -28,13 +30,10 @@ const NavBar = ({ name, image, userId }: Props) => {
 
     return () => {
       socket.off("response-user-status", (isOn) => {
-        console.log('====================================');
-        console.log(isOn);
-        console.log('====================================');
         setIsOnline(isOn);
       });
     };
-  }, []);
+  }, [userId]);
 
   return (
     <Box
@@ -119,7 +118,7 @@ const NavBar = ({ name, image, userId }: Props) => {
           </Menu>
         </Flex>
 
-        <ToggleDrawer isGroup />
+        <ToggleDrawer chat={chat} />
       </Flex>
     </Box>
   );

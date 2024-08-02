@@ -143,30 +143,30 @@ exports.getUserChats = async (req, res) => {
       include: {
         Message: {
           orderBy: {
-            createdAt:"desc"
+            createdAt: "desc",
           },
           take: 1,
         },
 
-        Member:{
-          where:{
-            userId:{
-              not:id
-            }
+        Member: {
+          where: {
+            userId: {
+              not: id,
+            },
           },
-          include:{
-            User:{
-              select:{
-                id:true,
-                bio:true,
-                email:true,
-                image:true,
-                createdAt:true,
-                name:true
-              }
-            }
-          }
-        }
+          include: {
+            User: {
+              select: {
+                id: true,
+                bio: true,
+                email: true,
+                image: true,
+                createdAt: true,
+                name: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -215,21 +215,22 @@ exports.getUserLastChat = async (req, res) => {
   try {
     const lastChat = await getUserLastChatModel(id);
 
-    if (!lastChat) {
-      res.status(200).json({
+    if (lastChat === null) {
+      return res.status(200).json({
         status: false,
         message: "No chat found",
         data: {
           noStoredChat: true,
         },
       });
-    } else {
-      res.status(200).json({
-        status: true,
-        message: "Chat fetched successfully",
-        data: lastChat,
-      });
     }
+
+    return res.status(200).json({
+      status: true,
+      message: "Chat fetched successfully",
+      data: lastChat,
+    });
+    
   } catch (error) {
     console.error(error.message);
     res.status(500).json({

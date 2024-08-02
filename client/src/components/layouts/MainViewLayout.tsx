@@ -42,6 +42,7 @@ const MainViewLayout = ({
       <Flex className="chat-bg" w={"100%"} flexDir={"column"}>
         <MainView {...props} overflow={"auto"} position={"relative"}>
           <NavBar
+            chat={chat}
             userId={chat.isGroup ? null : chat.Member[0].User.id}
             name={chat.isGroup ? (chat.name as string) : getName()}
             image={

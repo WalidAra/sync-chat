@@ -323,12 +323,12 @@
 .online-status::before {
   content: "";
   position: absolute;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background-color: rgba(3, 194, 3, 0.329);
   z-index: -1;
-  animation: UserStatus 1.5s infinite ease-in;
+  animation: UserStatus 1.2s infinite ease-in;
 }
 
 @keyframes UserStatus {

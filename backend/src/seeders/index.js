@@ -1,4 +1,5 @@
 const prisma = require("../../config/prisma");
+const { redisClient } = require("../../config/redis");
 
 const ProviderSeeder = async () => {
   try {
@@ -15,4 +16,18 @@ const ProviderSeeder = async () => {
   }
 };
 
-ProviderSeeder();
+// ProviderSeeder();
+
+const FlushAll = async () => {
+  try {
+    await redisClient.connect();
+    await redisClient.flushAll();
+    console.log("====================================");
+    console.log("done !!!");
+    console.log("====================================");
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+// FlushAll();

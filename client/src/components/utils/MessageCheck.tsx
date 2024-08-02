@@ -23,7 +23,7 @@ const MessageCheck = ({ isMyMsg, image, name, content, createdAt }: Props) => {
           flexDir={"column"}
           gap={2}
           w={"auto"}
-          maxWidth={"75%"}
+          maxWidth={"60%"}
         >
           <Flex justifyContent={"space-between"} alignItems={"center"}>
             <Text fontSize={"14px"} fontWeight={500}>
@@ -61,6 +61,7 @@ const MessageCheck = ({ isMyMsg, image, name, content, createdAt }: Props) => {
 
         <Box
           w={"inherit"}
+          maxWidth={"60%"}
           py={"2"}
           px={4}
           borderRadius={"16px 0px 16px 16px"}

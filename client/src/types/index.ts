@@ -49,6 +49,7 @@ export type Chat = {
   image: string | null;
   isGroup: boolean;
   name: string | null;
+  description: string | null;
 };
 
 export type Member = {

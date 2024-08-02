@@ -82,6 +82,7 @@ model Chat {
   isGroup   Boolean
   adminId   String?
   image     String?
+  description String?
   admin     User?     @relation(fields: [adminId], references: [id], onDelete: Cascade)
 
   Message    Message[]

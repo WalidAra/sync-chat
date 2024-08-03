@@ -20,8 +20,8 @@ type Props = {
 
 const MessageInputBox = ({ chatId }: Props) => {
   const [msg, setMsg] = useState<string>("");
-  const [type, setType] = useState<"SIMPLE" | "COMPLEX">("SIMPLE");
-  const [attachments, setAttachments] = useState<string[]>([]);
+  const [type] = useState<"SIMPLE" | "COMPLEX">("SIMPLE");
+  const [attachments] = useState<string[]>([]);
   const { token } = useAuth();
 
   const sendMessage = async (e: React.FormEvent<HTMLDivElement>) => {

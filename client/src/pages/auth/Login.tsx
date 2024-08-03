@@ -16,9 +16,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useFetch } from "../../hooks/useFetch";
-import { useDispatch } from "react-redux";
-import { setProfile } from "../../features/state_management/slices/user.slice";
-import { Client } from "../../types";
 import { useNavigate } from "react-router-dom";
 import { Checkbox } from "@chakra-ui/react";
 import { useAuth } from "../../hooks/useAuth";
@@ -32,7 +29,7 @@ const schema = z.object({
 });
 
 const Login: React.FC = () => {
-  const dispatch = useDispatch();
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useNavigate();
@@ -74,7 +71,7 @@ const Login: React.FC = () => {
       console.log('====================================');
 
       if (response.status === true) {
-        const { token, ...userData } = response.data;
+        const token = response.data.token;
         localStorage.setItem("sync-token", token);
         setToken(token);
         router("/");

@@ -17,6 +17,25 @@ import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { useFetch } from "../../hooks/useFetch";
 import { Chat, Member, Message } from "../../types";
+import socket from "../../utils/socket";
+
+const getChats = async (token: string) => {
+  const res = await useFetch({
+    feature: "/user",
+    method: "GET",
+    endPoint: "/chats",
+    token,
+  });
+
+  if (res.status === true) {
+    const data = res.data as ChatsResponseProps[];
+    console.log(data);
+
+    return data;
+  } else {
+    console.log("error");
+  }
+};
 
 type ChatsResponseProps = Chat & {
   Message: Message[];
@@ -29,24 +48,31 @@ const ChatsContainer = () => {
   const { token } = useAuth();
 
   useEffect(() => {
-    const getChats = async () => {
-      const res = await useFetch({
-        feature: "/user",
-        method: "GET",
-        endPoint: "/chats",
-        token,
-      });
-
-
-      if (res.status === true) {
-        const data = res.data as ChatsResponseProps[];
-        setChats(data);
-      }
-    };
-
     if (token) {
-      getChats();
+      getChats(token).then((data) => {
+        if (data) {
+          setChats(data);
+        }
+      });
     }
+  }, [token]);
+
+  useEffect(() => {
+    socket.on("new-chat", (is) => {
+      if (is) {
+        if (token) {
+          getChats(token).then((data) => {
+            if (data) {
+              setChats(data);
+            }
+          });
+        }
+      }
+    });
+
+    return () => {
+      socket.off("new-chat");
+    };
   }, [token]);
 
   return (
@@ -87,7 +113,7 @@ const ChatsContainer = () => {
               <MessageBox
                 key={chat.id}
                 chatId={chat.id}
-                msg={chat.Message[0]}
+                msg={chat.Message[0] || { content: "no messages" }}
                 image={chat.image || ""}
                 name={chat.name as string}
               />
@@ -103,7 +129,7 @@ const ChatsContainer = () => {
               <MessageBox
                 key={chat.id}
                 chatId={chat.id}
-                msg={chat.Message[0]}
+                msg={chat.Message[0] || { content: "no messages" }}
                 image={chat.Member[0].User.image || ""}
                 name={chat.Member[0].User.name}
                 isBordered

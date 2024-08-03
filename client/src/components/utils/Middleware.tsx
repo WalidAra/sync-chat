@@ -45,7 +45,6 @@ const Middleware = ({ children }: { children: React.ReactNode }) => {
   }
 
   if (!token) {
-
     if (!config.public.some((path) => pathname.startsWith(path))) {
       return <Navigate to="/auth/login" />;
     }

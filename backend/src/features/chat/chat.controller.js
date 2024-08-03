@@ -2,6 +2,8 @@ const prisma = require("../../../config/prisma");
 const {
   getUserLastChatModel,
   storeUserLastChat,
+  createChatModel,
+  getChatRoomInfo,
 } = require("./models/chat.model");
 
 const { createMemberOfChat } = require("./models/member.model");
@@ -10,48 +12,7 @@ exports.getChatInfo = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const chat = await prisma.chat.findUnique({
-      where: {
-        id: id,
-      },
-
-      include: {
-        Member: {
-          include: {
-            User: {
-              select: {
-                id: true,
-                bio: true,
-                email: true,
-                image: true,
-                createdAt: true,
-                name: true,
-              },
-            },
-          },
-        },
-
-        Message: {
-          include: {
-            User: {
-              select: {
-                id: true,
-                bio: true,
-                email: true,
-                image: true,
-                createdAt: true,
-                name: true,
-              },
-            },
-            MessageAttachments: {
-              include: {
-                Attachment: true,
-              },
-            },
-          },
-        },
-      },
-    });
+    const chat = await getChatRoomInfo(id);
 
     res.status(200).json({
       status: true,
@@ -98,15 +59,7 @@ exports.createChat = async (req, res) => {
       });
     }
 
-    const newChat = await prisma.chat.create({
-      data: {
-        name: name || null,
-        isGroup,
-        adminId: isGroup ? id : null,
-      },
-    });
-
-    await createMemberOfChat(members, newChat.id);
+    const newChat = await createChatModel(name, isGroup, members);
 
     // call redis
 
@@ -175,6 +128,7 @@ exports.getUserChats = async (req, res) => {
       message: "Chats fetched successfully",
       data: chats,
     });
+    
   } catch (error) {
     console.error(error.message);
     res.status(500).send({
@@ -230,7 +184,6 @@ exports.getUserLastChat = async (req, res) => {
       message: "Chat fetched successfully",
       data: lastChat,
     });
-    
   } catch (error) {
     console.error(error.message);
     res.status(500).json({

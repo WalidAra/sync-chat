@@ -16,12 +16,13 @@ const {
 const { getUserOnlineFriends } = require("./scripts/socket.script");
 const prisma = require("../../config/prisma");
 const { createMessage } = require("../features/chat/models/message.model");
+const { createChatModel } = require("../features/chat/models/chat.model");
 
 const markUserActivation = async (socket) => {
   return socket.on("user-activated", async (obj) => {
     if (obj.id) {
       const userId = obj.id;
-      redisHelper.set(`AC_${userId}`, socket.id);
+      await redisHelper.set(`AC_${userId}`, socket.id);
       const chats = await prisma.chat.findMany({
         where: {
           Member: {
@@ -70,7 +71,23 @@ const acceptFriendRequest = async (socket, io) => {
 
       if (senderId && receiverId) {
         const obj = await createFriend(senderId, receiverId);
+
         const res = await removeFriendRequest(senderId, receiverId);
+
+        await createChatModel("", false, [
+          senderId,
+          receiverId,
+        ]);
+
+        const socketSender = await redisHelper.get(`AC_${senderId}`);
+        const socketReceiver = await redisHelper.get(`AC_${receiverId}`);
+
+        if (socketSender) {
+          io.to(socketSender).emit("new-chat", true);
+        }
+        if (socketReceiver) {
+          io.to(socketReceiver).emit("new-chat", true);
+        }
 
         if (obj && obj.count === 2 && res) {
           await getUserOnlineFriends(socket, senderId, io);
@@ -105,22 +122,22 @@ const sendFriendRequest = async (socket) => {
   return socket.on("send-friend-request", async ({ token, receiverId }) => {
     try {
       const obj = jwt.verify(token, process.env.JWT_SECRET);
-
       const senderId = obj.id;
 
       if (senderId && receiverId) {
-        const activeClientsKeys = await redisHelper.keys("AC_*");
-
-        const receivers = activeClientsKeys.filter(
-          (userId) => userId.split("_")[1] === receiverId
-        );
-
-        const receiverSocket = await redisHelper.get(receivers[0]);
-
         const data = await createFriendRequest(senderId, receiverId);
 
-        if (receiverSocket && data) {
-          socket.to(receiverSocket).emit("friend-requests", data);
+        const activeClientsKeys = await redisHelper.keys("AC_*");
+
+        const receiver = activeClientsKeys.find(
+          (key) => key.split("_")[1] === receiverId
+        );
+        if (receiver) {
+          const receiverSocket = await redisHelper.get(receiver);
+
+          if (receiverSocket && data) {
+            socket.to(receiverSocket).emit("friend-requests", data);
+          }
         }
       }
     } catch (error) {

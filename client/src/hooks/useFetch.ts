@@ -18,10 +18,6 @@ export const useFetch = async ({
     token ? "/private" : "/public"
   }${endPoint}`;
 
-  console.log('====================================');
-  console.log(url);
-  console.log('====================================');
-
   try {
     const axiosConfig: AxiosRequestConfig = {
       method: method.toUpperCase(),

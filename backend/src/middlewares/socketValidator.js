@@ -74,10 +74,7 @@ const acceptFriendRequest = async (socket, io) => {
 
         const res = await removeFriendRequest(senderId, receiverId);
 
-        await createChatModel("", false, [
-          senderId,
-          receiverId,
-        ]);
+        await createChatModel("", false, [senderId, receiverId]);
 
         const socketSender = await redisHelper.get(`AC_${senderId}`);
         const socketReceiver = await redisHelper.get(`AC_${receiverId}`);
@@ -182,6 +179,26 @@ const requestUserStatus = async (socket, io) => {
   });
 };
 
+const createGroupChat = (socket, io) => {
+  return socket.on("create-group-chat", async (obj) => {
+    const { name, members, token, description } = obj;
+    try {
+      const obj = jwt.verify(token, process.env.JWT_SECRET);
+      const adminId = obj.id;
+
+      members.push(adminId);
+      await createChatModel(name, true, members, adminId, description);
+
+      members.forEach(async (userId) => {
+        const socketId = await redisHelper.get(`AC_${userId}`);
+        io.to(socketId).emit("new-chat", true);
+      });
+    } catch (error) {
+      console.error(error.message);
+    }
+  });
+};
+
 module.exports = {
   markUserActivation,
   markUserDisconnect,
@@ -190,4 +207,5 @@ module.exports = {
   acceptFriendRequest,
   sendMessageToChat,
   requestUserStatus,
+  createGroupChat,
 };

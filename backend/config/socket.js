@@ -8,6 +8,7 @@ const {
   acceptFriendRequest,
   sendMessageToChat,
   requestUserStatus,
+  createGroupChat,
 } = require("../src/middlewares/socketValidator");
 
 const socketInitializer = (httpServer) => {
@@ -26,6 +27,7 @@ const socketInitializer = (httpServer) => {
     acceptFriendRequest(socket, io);
     sendMessageToChat(socket, io);
     requestUserStatus(socket, io);
+    createGroupChat(socket, io);
   });
 };
 

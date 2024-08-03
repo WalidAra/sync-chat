@@ -19,13 +19,14 @@ const storeUserLastChat = async (id, chatId) => {
   }
 };
 
-const createChatModel = async (name, isGroup, members) => {
+const createChatModel = async (name, isGroup, members, id, description) => {
   try {
     const newChat = await prisma.chat.create({
       data: {
         name: name || null,
         isGroup,
         adminId: isGroup ? id : null,
+        description: description || null,
       },
     });
 
